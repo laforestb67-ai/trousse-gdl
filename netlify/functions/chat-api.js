@@ -1,6 +1,9 @@
 const Anthropic = require("@anthropic-ai/sdk");
 
 exports.handler = async (event) => {
+  console.log("🔵 chat-api function called");
+  console.log("Method:", event.httpMethod);
+
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: JSON.stringify({ error: "Method not allowed" }), headers: { "Content-Type": "application/json" } };
   }
