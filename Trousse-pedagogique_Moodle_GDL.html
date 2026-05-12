@@ -623,7 +623,7 @@ async function sendMessage() {
     const response = await fetch("/.netlify/functions/chat-api", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ model: "claude-3-5-sonnet-20241022", system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
+      body: JSON.stringify({ model: "claude-opus-4-6", system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
     });
     if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error?.message || `Erreur API ${response.status}`); }
     const data = await response.json();
