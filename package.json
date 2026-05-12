@@ -1,0 +1,12 @@
+{
+  "name": "trousse-gdl",
+  "version": "1.0.0",
+  "description": "Trousse pédagogique GDL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3"
+  }
+}
