@@ -485,7 +485,7 @@ function setApiKey(k) { localStorage.setItem(STORAGE_KEY, k); }
 function clearApiKey() { localStorage.removeItem(STORAGE_KEY); }
 function getModel() { return localStorage.getItem(STORAGE_MODEL) || MODELS[1].id; }
 function setModel(m) { localStorage.setItem(STORAGE_MODEL, m); }
-function renderChatBody() { if (!getApiKey()) renderSetup(); else renderConversation(); }
+function renderChatBody() { renderConversation(); }
 
 function renderSetup() {
   $chatBody.innerHTML = `
@@ -525,7 +525,6 @@ function renderConversation() {
         </div>
         <div class="chat-controls">
           <button id="clear-conv">Nouvelle conversation</button>
-          <button id="reset-key">Changer la clé / le modèle</button>
         </div>
       </div>
     </div>`;
@@ -537,9 +536,6 @@ function renderConversation() {
   $send.addEventListener("click", sendMessage);
   document.getElementById("clear-conv").addEventListener("click", () => {
     if (confirm("Effacer la conversation et les ressources recommandées ?")) { conversation = []; recommendedTitles.clear(); renderConversationMessages(); updateRecommendedBar(); }
-  });
-  document.getElementById("reset-key").addEventListener("click", () => {
-    if (confirm("Changer la clé API ? La conversation actuelle sera conservée.")) { clearApiKey(); renderSetup(); }
   });
   document.getElementById("open-synthesis").addEventListener("click", openModal);
   updateRecommendedBar();
@@ -624,10 +620,10 @@ async function sendMessage() {
   $messages.appendChild(thinkingEl);
   $messages.scrollTop = $messages.scrollHeight;
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("/.netlify/functions/chat-api", {
       method: "POST",
-      headers: { "x-api-key": getApiKey(), "anthropic-version": "2023-06-01", "content-type": "application/json", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({ model: getModel(), max_tokens: 1500, system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ model: "claude-3-5-sonnet-20241022", system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
     });
     if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error?.message || `Erreur API ${response.status}`); }
     const data = await response.json();
@@ -635,7 +631,7 @@ async function sendMessage() {
     conversation.push({ role: "assistant", content: assistantText });
     detectRecommendedResources(assistantText);
   } catch (e) {
-    conversation.push({ role: "assistant", content: `❌ Erreur : ${e.message}\n\nVérifiez votre clé API et votre connexion.`, error: true });
+    conversation.push({ role: "assistant", content: `❌ Erreur : ${e.message}\n\nVérifiez votre connexion internet.`, error: true });
   } finally {
     isThinking = false; renderConversationMessages(); updateRecommendedBar();
   }
