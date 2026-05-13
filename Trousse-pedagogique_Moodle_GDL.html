@@ -1401,13 +1401,14 @@ const $modalCancel = document.getElementById("modal-cancel");
 const $exportPdf = document.getElementById("export-pdf");
 const $exportDocx = document.getElementById("export-docx");
 
-$chatFab.addEventListener("click", openChat);
-$chatClose.addEventListener("click", closeChat);
-$modalClose.addEventListener("click", closeModal);
-$modalCancel.addEventListener("click", closeModal);
-$exportPdf.addEventListener("click", () => exportSynthesis("pdf"));
-$exportDocx.addEventListener("click", () => exportSynthesis("docx"));
-$modalOverlay.addEventListener("click", e => { if (e.target === $modalOverlay) closeModal(); });
+// Attach event listeners safely with null checks
+if ($chatFab) $chatFab.addEventListener("click", openChat);
+if ($chatClose) $chatClose.addEventListener("click", closeChat);
+if ($modalClose) $modalClose.addEventListener("click", closeModal);
+if ($modalCancel) $modalCancel.addEventListener("click", closeModal);
+if ($exportPdf) $exportPdf.addEventListener("click", () => exportSynthesis("pdf"));
+if ($exportDocx) $exportDocx.addEventListener("click", () => exportSynthesis("docx"));
+if ($modalOverlay) $modalOverlay.addEventListener("click", e => { if (e.target === $modalOverlay) closeModal(); });
 
 function openChat() { $chatPanel.classList.add("open"); $chatPanel.setAttribute("aria-hidden", "false"); $chatFab.classList.add("hidden"); renderChatBody(); }
 function closeChat() { $chatPanel.classList.remove("open"); $chatPanel.setAttribute("aria-hidden", "true"); $chatFab.classList.remove("hidden"); }
