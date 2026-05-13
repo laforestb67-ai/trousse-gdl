@@ -1558,4 +1558,154 @@ async function sendMessage() {
   renderConversationMessages();
   const $messages = document.getElementById("chat-messages");
   const thinkingEl = document.createElement("div");
-  thinkingEl.className =
+  thinkingEl.className = "message thinking";
+  thinkingEl.innerHTML = `<div class="message-role">Assistant</div><div class="message-content">L'assistant réfléchit…</div>`;
+  $messages.appendChild(thinkingEl);
+  $messages.scrollTop = $messages.scrollHeight;
+  try {
+    const response = await fetch("/.netlify/functions/chat-api", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ model: getModel(), system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
+    });
+    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error || `Erreur ${response.status}`); }
+    const data = await response.json();
+    const assistantText = data.content?.[0]?.text || "(réponse vide)";
+    conversation.push({ role: "assistant", content: assistantText });
+    detectRecommendedResources(assistantText);
+  } catch (e) {
+    conversation.push({ role: "assistant", content: `❌ Erreur : ${e.message}\n\nVérifiez votre connexion internet.`, error: true });
+  } finally {
+    isThinking = false; renderConversationMessages(); updateRecommendedBar();
+  }
+}
+
+function detectRecommendedResources(text) {
+  const all = getAllResources();
+  const matches = text.matchAll(/\[RESSOURCE\s*:\s*([^\]]+?)\]/g);
+  for (const m of matches) {
+    const title = m[1].trim();
+    let res = all.find(r => r.titre === title);
+    if (!res) {
+      const tLow = title.toLowerCase();
+      res = all.find(r => r.titre.toLowerCase() === tLow) || all.find(r => r.titre.toLowerCase().includes(tLow) || tLow.includes(r.titre.toLowerCase().substring(0, 40)));
+    }
+    if (res) recommendedTitles.add(res.titre);
+  }
+}
+
+function updateRecommendedBar() {
+  const $bar = document.getElementById("recommended-bar");
+  if (!$bar) return;
+  const n = recommendedTitles.size;
+  if (n > 0) { $bar.classList.add("active"); document.getElementById("recommended-count").textContent = `${n} ressource${n > 1 ? "s" : ""} recommandée${n > 1 ? "s" : ""}`; }
+  else $bar.classList.remove("active");
+}
+
+// === Synthesis Modal ===
+function openModal() {
+  if (recommendedTitles.size === 0) { alert("Aucune ressource n'a été recommandée. Continuez la conversation pour obtenir des suggestions."); return; }
+  renderSynthesisPreview(); $modalOverlay.classList.add("open"); $modalOverlay.setAttribute("aria-hidden", "false");
+}
+function closeModal() { $modalOverlay.classList.remove("open"); $modalOverlay.setAttribute("aria-hidden", "true"); }
+function getRecommendedResources() { const all = getAllResources(); return Array.from(recommendedTitles).map(t => all.find(r => r.titre === t)).filter(Boolean); }
+function getInitialContext() { const first = conversation.find(m => m.role === "user"); return first ? first.content : "Recommandations issues d'une consultation de l'assistant pédagogique."; }
+
+function renderSynthesisPreview() {
+  const recs = getRecommendedResources();
+  const date = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
+  const byActivity = {};
+  recs.forEach(r => { const act = r.activite || "Autre"; if (!byActivity[act]) byActivity[act] = []; byActivity[act].push(r); });
+  let html = `
+    <div class="synthesis-preview">
+      <h2>Fiche-synthèse de ressources pédagogiques</h2>
+      <div class="subtitle">Microprogramme Gestion de la douleur · ${date}</div>
+      <h3>Contexte du besoin</h3>
+      <textarea class="context-edit" id="synth-context" placeholder="Résumez le besoin pédagogique...">${escapeHTML(getInitialContext())}</textarea>
+      <h3>Ressources recommandées (${recs.length})</h3>`;
+  for (const [act, items] of Object.entries(byActivity)) {
+    html += `<h4>${escapeHTML(act)}</h4>`;
+    items.forEach(r => {
+      const cat = getCategoryById(r.categorie);
+      html += `<div class="synthesis-resource" data-title="${escapeHTML(r.titre)}">
+        <button class="remove-btn" aria-label="Retirer">×</button>
+        <div class="res-title">${escapeHTML(r.titre)}</div>
+        <div class="res-meta">${escapeHTML(cat.label)} · ${escapeHTML(getTypeLabel(r.type))} · ${escapeHTML(r.duree || "—")}</div>
+        <div class="res-desc">${escapeHTML(r.description)}</div>
+        <div class="res-url">${escapeHTML(r.url)}</div></div>`;
+    });
+  }
+  html += `</div>`;
+  $modalBody.innerHTML = html;
+  $modalBody.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", e => {
+      const card = e.target.closest(".synthesis-resource");
+      const title = card.dataset.title;
+      recommendedTitles.delete(title);
+      if (recommendedTitles.size === 0) closeModal(); else renderSynthesisPreview();
+      updateRecommendedBar();
+    });
+  });
+}
+
+function exportSynthesis(format) {
+  const recs = getRecommendedResources();
+  if (recs.length === 0) { alert("Aucune ressource à exporter."); return; }
+  const context = document.getElementById("synth-context")?.value || getInitialContext();
+  const date = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
+  const filenameDate = new Date().toISOString().slice(0, 10);
+  if (format === "docx") exportDocx(context, recs, date, filenameDate);
+  else exportPdf(context, recs, date);
+}
+
+function buildSynthesisHtml(context, recs, date) {
+  const byActivity = {};
+  recs.forEach(r => { const act = r.activite || "Autre"; if (!byActivity[act]) byActivity[act] = []; byActivity[act].push(r); });
+  const css = `
+    @page { size: A4; margin: 1.5cm 2cm; }
+    body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; line-height: 1.55; max-width: 720px; margin: 0 auto; padding: 12px; }
+    .header { background: #00553A; color: white; padding: 24px; margin-bottom: 24px; border-radius: 4px; }
+    .header h1 { font-size: 20pt; margin: 0 0 6px 0; font-weight: 600; }
+    .header .meta { font-size: 11pt; opacity: 0.92; }
+    h2 { color: #00553A; font-size: 13pt; margin: 22px 0 10px; padding-bottom: 4px; border-bottom: 2px solid #F1B434; }
+    .context { background: #FFF1CC; padding: 12px 16px; border-left: 4px solid #F1B434; border-radius: 4px; font-size: 11pt; margin-bottom: 12px; }
+    .resource { background: #fafaf9; padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #00553A; page-break-inside: avoid; }
+    .r-title { font-weight: 600; font-size: 11pt; color: #1a1a1a; }
+    .r-meta { font-size: 9pt; color: #767676; margin: 4px 0 6px; }
+    .r-desc { font-size: 10pt; color: #4a4a4a; }
+    .r-url { font-size: 9pt; color: #00553A; word-break: break-all; margin-top: 4px; }
+    .footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid #e5e5e3; font-size: 9pt; color: #767676; }`;
+  let body = `<div class="header"><h1>Fiche-synthèse de ressources pédagogiques</h1><div class="meta">Microprogramme Gestion de la douleur · FMSS — Université de Sherbrooke<br>${date}</div></div><h2>Contexte du besoin</h2><div class="context">${escapeHTML(context).replace(/\n/g, "<br>")}</div>`;
+  for (const [act, items] of Object.entries(byActivity)) {
+    body += `<h2>${escapeHTML(act)}</h2>`;
+    items.forEach(r => {
+      const cat = getCategoryById(r.categorie);
+      body += `<div class="resource"><div class="r-title">${escapeHTML(r.titre)}</div><div class="r-meta">${escapeHTML(cat.label)} · ${escapeHTML(getTypeLabel(r.type))} · ${escapeHTML(r.duree || "—")}</div><div class="r-desc">${escapeHTML(r.description)}</div><div class="r-url">${escapeHTML(r.url)}</div></div>`;
+    });
+  }
+  body += `<div class="footer"><strong>Trousse pédagogique Moodle — Microprogramme GDL</strong><br>Fiche générée le ${date} via l'assistant pédagogique de la trousse.<br>Toutes les ressources listées sont publiquement accessibles.</div>`;
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Fiche-synthèse — ${date}</title><style>${css}</style></head><body>${body}</body></html>`;
+}
+
+function exportPdf(context, recs, date) {
+  const html = buildSynthesisHtml(context, recs, date);
+  const w = window.open("", "_blank");
+  if (!w) { alert("Impossible d'ouvrir une nouvelle fenêtre. Autorisez les pop-ups pour ce site."); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+  setTimeout(() => { w.focus(); w.print(); }, 500);
+}
+
+function exportDocx(context, recs, date, filenameDate) {
+  const html = buildSynthesisHtml(context, recs, date);
+  const wordHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>${html.substring(html.indexOf("<head>"))}`;
+  const blob = new Blob(["﻿", wordHtml], { type: "application/msword" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `Fiche-synthese_GDL_${filenameDate}.doc`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+</script>
+
+</body>
+</html>
