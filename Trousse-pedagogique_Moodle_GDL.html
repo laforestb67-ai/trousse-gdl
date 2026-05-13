@@ -1411,10 +1411,10 @@ $modalOverlay.addEventListener("click", e => { if (e.target === $modalOverlay) c
 
 function openChat() { $chatPanel.classList.add("open"); $chatPanel.setAttribute("aria-hidden", "false"); $chatFab.classList.add("hidden"); renderChatBody(); }
 function closeChat() { $chatPanel.classList.remove("open"); $chatPanel.setAttribute("aria-hidden", "true"); $chatFab.classList.remove("hidden"); }
-function openPrivacyModal() { document.getElementById("privacyModalOverlay").classList.add("active"); }
-function closePrivacyModal() { document.getElementById("privacyModalOverlay").classList.remove("active"); }
-document.getElementById("privacyModalOverlay").addEventListener("click", e => { if (e.target.id === "privacyModalOverlay") closePrivacyModal(); });
-function acceptConsent() { setConsent(); document.getElementById("consentModalOverlay").classList.remove("active"); }
+function openPrivacyModal() { const el = document.getElementById("privacyModalOverlay"); if (el) el.classList.add("active"); }
+function closePrivacyModal() { const el = document.getElementById("privacyModalOverlay"); if (el) el.classList.remove("active"); }
+(() => { const el = document.getElementById("privacyModalOverlay"); if (el) el.addEventListener("click", e => { if (e.target.id === "privacyModalOverlay") closePrivacyModal(); }); })();
+function acceptConsent() { setConsent(); const el = document.getElementById("consentModalOverlay"); if (el) el.classList.remove("active"); }
 function rejectConsent() { alert("Vous devez accepter pour utiliser le chatbot."); }
 function clearAllData() {
   if (confirm("Êtes-vous sûr de vouloir effacer votre conversation et vos données locales ?\n\nNote : Les données chez Anthropic ne peuvent pas être supprimées par l'Université.")) {
@@ -1426,16 +1426,15 @@ function clearAllData() {
     alert("✓ Vos données locales ont été supprimées.\n\nRappel : Vos données chez Anthropic restent selon leur politique de confidentialité.");
   }
 }
-document.getElementById("consent-checkbox").addEventListener("change", e => {
-  document.getElementById("acceptBtn").disabled = !e.target.checked;
-});
+(() => { const el = document.getElementById("consent-checkbox"); if (el) el.addEventListener("change", e => { const btn = document.getElementById("acceptBtn"); if (btn) btn.disabled = !e.target.checked; }); })();
 function getModel() { return sessionStorage.getItem(STORAGE_MODEL) || MODELS[1].id; }
 function setModel(m) { sessionStorage.setItem(STORAGE_MODEL, m); }
 function hasConsent() { return sessionStorage.getItem("gdl_consent") === "true"; }
 function setConsent() { sessionStorage.setItem("gdl_consent", "true"); }
 function renderChatBody() {
   if (!hasConsent()) {
-    document.getElementById("consentModalOverlay").classList.add("active");
+    const el = document.getElementById("consentModalOverlay");
+    if (el) el.classList.add("active");
     return;
   }
   renderConversation();
