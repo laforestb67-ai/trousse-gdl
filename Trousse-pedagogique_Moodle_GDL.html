@@ -206,6 +206,44 @@
   .chat-controls { display: flex; gap: 6px; margin-top: 8px; }
   .chat-controls button { background: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px; color: var(--muted); cursor: pointer; font-family: inherit; font-size: 11px; }
   .chat-controls button:hover { color: var(--ink); border-color: var(--ink-soft); }
+  .privacy-footer { background: #f4f9f6; border-top: 1px solid #d0e8d8; padding: 10px 16px; display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
+  .privacy-footer-icon { color: var(--uds-green); font-size: 0.85rem; flex-shrink: 0; margin-top: 2px; }
+  .privacy-footer-text { font-size: 0.72rem; color: #666; line-height: 1.5; }
+  .privacy-footer-text strong { color: var(--uds-green); font-weight: 700; }
+  .privacy-footer-link { color: var(--uds-green); text-decoration: none; border-bottom: 1px dotted var(--uds-green); cursor: pointer; }
+  .privacy-footer-link:hover { opacity: 0.8; }
+  .privacy-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1100; justify-content: center; align-items: center; padding: 16px; }
+  .privacy-modal-overlay.active { display: flex; }
+  .privacy-modal { background: white; border-radius: 12px; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+  .privacy-modal-header { background: linear-gradient(135deg, var(--uds-green), var(--uds-green-dark)); color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
+  .privacy-modal-header h3 { margin: 0; font-size: 1rem; font-weight: 600; }
+  .privacy-modal-close { background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .privacy-modal-close:hover { background: rgba(255, 255, 255, 0.35); }
+  .privacy-modal-body { padding: 24px; font-size: 0.9rem; line-height: 1.7; color: #333; }
+  .privacy-modal-body h4 { color: var(--uds-green); margin: 18px 0 10px; font-size: 0.95rem; font-weight: 600; }
+  .privacy-modal-body p { margin: 0 0 12px; }
+  .privacy-badge { display: inline-flex; align-items: center; gap: 4px; background: #e8f5ee; color: var(--uds-green); border: 1px solid #c0ddd0; border-radius: 20px; padding: 5px 12px; font-size: 0.75rem; font-weight: 700; margin: 4px 4px 4px 0; }
+  .consent-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center; padding: 16px; }
+  .consent-modal-overlay.active { display: flex; }
+  .consent-modal { background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4); }
+  .consent-header { background: linear-gradient(135deg, var(--uds-green), var(--uds-green-dark)); color: white; padding: 24px; border-radius: 12px 12px 0 0; }
+  .consent-header h2 { margin: 0; font-size: 1.3rem; font-weight: 600; }
+  .consent-body { padding: 24px; font-size: 0.95rem; line-height: 1.7; color: #333; }
+  .consent-body h3 { color: var(--uds-green); margin: 16px 0 10px; font-size: 1rem; font-weight: 600; }
+  .consent-body p { margin: 0 0 12px; }
+  .consent-body ul { margin: 12px 0; padding-left: 20px; }
+  .consent-body li { margin: 6px 0; }
+  .consent-checkbox-group { background: #f8f9fa; padding: 16px; border-radius: 8px; margin: 16px 0; border-left: 4px solid var(--uds-green); }
+  .consent-checkbox-group label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+  .consent-checkbox-group input[type="checkbox"] { margin-top: 4px; cursor: pointer; }
+  .consent-footer { padding: 16px 24px; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end; }
+  .consent-btn-reject { background: #6c757d; color: white; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+  .consent-btn-reject:hover { background: #5a6268; }
+  .consent-btn-accept { background: var(--uds-green); color: white; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
+  .consent-btn-accept:hover:not(:disabled) { background: var(--uds-green-dark); }
+  .consent-btn-accept:disabled { opacity: 0.5; cursor: not-allowed; }
+  .clear-data-btn { background: #c0392b; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s; }
+  .clear-data-btn:hover { background: #a93226; }
   .recommended-bar { background: var(--uds-gold-light); border-top: 2px solid var(--uds-gold); padding: 12px 16px; display: none; justify-content: space-between; align-items: center; flex-shrink: 0; }
   .recommended-bar.active { display: flex; }
   .recommended-bar .count { font-size: 13px; color: var(--uds-gold-dark); font-weight: 600; }
@@ -344,6 +382,84 @@
       <button class="btn-gold" id="export-pdf">📄 Exporter PDF</button>
       <button class="btn-primary" id="export-docx">📝 Exporter Word</button>
     </footer>
+  </div>
+</div>
+
+<!-- MODAL CONSENTEMENT (LOI 25) -->
+<div class="consent-modal-overlay" id="consentModalOverlay">
+  <div class="consent-modal">
+    <div class="consent-header">
+      <h2>🔒 Consentement — Utilisation du chatbot</h2>
+    </div>
+    <div class="consent-body">
+      <h3>Avant de continuer, veuillez lire les informations suivantes :</h3>
+
+      <p><strong>Cette trousse pédagogique utilise Claude (Anthropic)</strong> pour vous fournir des recommandations intelligentes. Vos questions seront <strong>transmises aux serveurs d'Anthropic (États-Unis)</strong> de manière chiffrée.</p>
+
+      <h3>Vos droits selon la Loi 25 :</h3>
+      <ul>
+        <li><strong>Droit d'accès :</strong> Vous pouvez accéder à vos données</li>
+        <li><strong>Droit de rectification :</strong> Vous pouvez corriger vos données</li>
+        <li><strong>Droit à l'oubli :</strong> Vous pouvez supprimer vos données locales (bouton "Effacer toutes mes données")</li>
+        <li><strong>Droit de connaître les transferts :</strong> Vos données sont traitées par Anthropic aux États-Unis</li>
+      </ul>
+
+      <h3>Sécurité :</h3>
+      <p>Vos communications sont <strong>chiffrées (HTTPS)</strong> et transmises via un serveur intermédiaire sécurisé (Netlify). Aucune donnée personnelle identifiante n'est requise pour utiliser cette trousse.</p>
+
+      <h3>Important :</h3>
+      <p><strong>Ne partagez pas de données personnelles sensibles</strong> (numéros d'ID, adresses, numéros de téléphone, etc.). Anonymisez toute information avant de la partager.</p>
+
+      <div class="consent-checkbox-group">
+        <label>
+          <input type="checkbox" id="consent-checkbox">
+          <span>J'ai lu et j'accepte que mes questions soient transmises à Anthropic (États-Unis) conformément à la Loi 25 du Québec. J'ai compris mes droits d'accès et de suppression de mes données.</span>
+        </label>
+      </div>
+
+      <p style="font-size: 0.85rem; color: #666;">
+        <strong>Politique de confidentialité :</strong>
+        <a href="https://www.usherbrooke.ca/decouvrir/a-propos/protection-des-renseignements-personnels" target="_blank" style="color: var(--uds-green); text-decoration: none; border-bottom: 1px dotted var(--uds-green);">Lire la politique UdeS</a>
+      </p>
+    </div>
+    <div class="consent-footer">
+      <button class="consent-btn-reject" onclick="rejectConsent()">Refuser et quitter</button>
+      <button class="consent-btn-accept" id="acceptBtn" onclick="acceptConsent()" disabled>Accepter et continuer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIDENTIALITÉ (LOI 25) -->
+<div class="privacy-modal-overlay" id="privacyModalOverlay">
+  <div class="privacy-modal">
+    <div class="privacy-modal-header">
+      <h3>🔒 Confidentialité et Loi 25</h3>
+      <button class="privacy-modal-close" onclick="closePrivacyModal()">✕</button>
+    </div>
+    <div class="privacy-modal-body">
+      <div style="margin-bottom: 12px;">
+        <span class="privacy-badge">✓ Chiffré</span>
+        <span class="privacy-badge">✓ Sécurisé</span>
+        <span class="privacy-badge">✓ Conforme Loi 25</span>
+      </div>
+
+      <h4>Le chatbot et Claude API (Anthropic)</h4>
+      <p>Cette trousse utilise <strong>Claude</strong> (Anthropic) pour fournir des recommandations pédagogiques intelligentes. Vos questions et l'historique de conversation sont <strong>transmis de manière chiffrée</strong> aux serveurs d'Anthropic via un serveur intermédiaire sécurisé (Netlify).</p>
+
+      <h4>Sécurité et transmission</h4>
+      <p><strong>Votre clé API n'est jamais visible.</strong> Elle est stockée uniquement dans les variables d'environnement du serveur et n'est jamais partagée avec vous. Toute communication est <strong>chiffrée (HTTPS)</strong>.</p>
+
+      <h4>Conformité à la Loi 25 du Québec</h4>
+      <p>Anthropic (États-Unis) traite vos messages selon sa politique de confidentialité. <strong>Aucune donnée personnelle identifiante n'est requise.</strong> Utilisez cette trousse de manière <strong>anonyme</strong>. Si vous mentionnez des données personnelles, veuillez les <strong>anonymiser.</strong></p>
+
+      <h4>Recommandations institutionnelles</h4>
+      <p>Pour un déploiement à grande échelle, l'<strong>Université de Sherbrooke recommande de faire valider l'EFVP</strong> (Évaluation des facteurs relatifs aux vies privées) par votre <strong>Bureau de la protection des renseignements personnels.</strong></p>
+
+      <h4>Questions ?</h4>
+      <p><strong>Centre de pédagogie des sciences de la santé (CPSS)</strong><br>
+      👤 Benoît Laforest<br>
+      ✉️ benoit.laforest@usherbrooke.ca</p>
+    </div>
   </div>
 </div>
 
@@ -1295,9 +1411,35 @@ $modalOverlay.addEventListener("click", e => { if (e.target === $modalOverlay) c
 
 function openChat() { $chatPanel.classList.add("open"); $chatPanel.setAttribute("aria-hidden", "false"); $chatFab.classList.add("hidden"); renderChatBody(); }
 function closeChat() { $chatPanel.classList.remove("open"); $chatPanel.setAttribute("aria-hidden", "true"); $chatFab.classList.remove("hidden"); }
-function getModel() { return localStorage.getItem(STORAGE_MODEL) || MODELS[1].id; }
-function setModel(m) { localStorage.setItem(STORAGE_MODEL, m); }
-function renderChatBody() { renderConversation(); }
+function openPrivacyModal() { document.getElementById("privacyModalOverlay").classList.add("active"); }
+function closePrivacyModal() { document.getElementById("privacyModalOverlay").classList.remove("active"); }
+document.getElementById("privacyModalOverlay").addEventListener("click", e => { if (e.target.id === "privacyModalOverlay") closePrivacyModal(); });
+function acceptConsent() { setConsent(); document.getElementById("consentModalOverlay").classList.remove("active"); }
+function rejectConsent() { alert("Vous devez accepter pour utiliser le chatbot."); }
+function clearAllData() {
+  if (confirm("Êtes-vous sûr de vouloir effacer votre conversation et vos données locales ?\n\nNote : Les données chez Anthropic ne peuvent pas être supprimées par l'Université.")) {
+    conversation = [];
+    recommendedTitles.clear();
+    sessionStorage.removeItem(STORAGE_MODEL);
+    renderConversationMessages();
+    updateRecommendedBar();
+    alert("✓ Vos données locales ont été supprimées.\n\nRappel : Vos données chez Anthropic restent selon leur politique de confidentialité.");
+  }
+}
+document.getElementById("consent-checkbox").addEventListener("change", e => {
+  document.getElementById("acceptBtn").disabled = !e.target.checked;
+});
+function getModel() { return sessionStorage.getItem(STORAGE_MODEL) || MODELS[1].id; }
+function setModel(m) { sessionStorage.setItem(STORAGE_MODEL, m); }
+function hasConsent() { return sessionStorage.getItem("gdl_consent") === "true"; }
+function setConsent() { sessionStorage.setItem("gdl_consent", "true"); }
+function renderChatBody() {
+  if (!hasConsent()) {
+    document.getElementById("consentModalOverlay").classList.add("active");
+    return;
+  }
+  renderConversation();
+}
 
 function renderConversation() {
   $chatBody.innerHTML = `
@@ -1316,7 +1458,15 @@ function renderConversation() {
         </div>
         <div class="chat-controls">
           <button id="clear-conv">Nouvelle conversation</button>
+          <button class="clear-data-btn" id="clear-all-data" title="Supprime votre conversation et vos données locales">🗑️ Effacer mes données</button>
         </div>
+      </div>
+      <div class="privacy-footer">
+        <span class="privacy-footer-icon">🔒</span>
+        <span class="privacy-footer-text">
+          <strong>Confidentialité (Loi 25) :</strong> Le chatbot utilise Claude (Anthropic) via un serveur sécurisé. Vos questions sont traitées en conformité avec la Loi 25.
+          <span class="privacy-footer-link" onclick="openPrivacyModal()">En savoir plus</span>
+        </span>
       </div>
     </div>`;
   renderConversationMessages();
@@ -1328,6 +1478,7 @@ function renderConversation() {
   document.getElementById("clear-conv").addEventListener("click", () => {
     if (confirm("Effacer la conversation et les ressources recommandées ?")) { conversation = []; recommendedTitles.clear(); renderConversationMessages(); updateRecommendedBar(); }
   });
+  document.getElementById("clear-all-data").addEventListener("click", clearAllData);
   document.getElementById("open-synthesis").addEventListener("click", openModal);
   updateRecommendedBar();
 }
