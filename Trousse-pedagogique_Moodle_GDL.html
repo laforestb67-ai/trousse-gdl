@@ -1,1711 +1,773 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trousse pédagogique Moodle — Microprogramme GDL | FMSS UdeS</title>
-<meta name="description" content="Ressources curées pour la transition vers Moodle du microprogramme Gestion de la douleur (FMSS UdeS) : capsule vidéo, PPT narré, H5P, podcast, examen Moodle.">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --uds-green: #00553A;
-    --uds-green-dark: #003D29;
-    --uds-green-light: #E6F0EC;
-    --uds-gold: #F1B434;
-    --uds-gold-dark: #8B6914;
-    --uds-gold-light: #FFF1CC;
-    --ink: #1a1a1a;
-    --ink-soft: #4a4a4a;
-    --muted: #767676;
-    --bg: #fafaf9;
-    --surface: #ffffff;
-    --border: #e5e5e3;
-    --border-strong: #c9c9c7;
-    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
-    --shadow-strong: 0 4px 16px rgba(0,0,0,.08), 0 12px 32px rgba(0,0,0,.06);
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-  html, body { height: 100%; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: var(--ink); background: var(--bg);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  a { color: var(--uds-green); text-decoration: none; }
-  a:hover, a:focus { text-decoration: underline; }
-  a:focus-visible { outline: 2px solid var(--uds-green); outline-offset: 3px; border-radius: 2px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conseiller Pédagogique Virtuel - FMSS</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:linear-gradient(135deg,#007749 0%,#005a35 100%); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
 
-  header.app-header {
-    background: linear-gradient(135deg, var(--uds-green) 0%, var(--uds-green-dark) 100%);
-    color: #fff; padding: 36px 24px 28px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.06);
-  }
-  .container { max-width: 1180px; margin: 0 auto; }
-  header.app-header .eyebrow {
-    text-transform: uppercase; letter-spacing: 0.12em;
-    font-size: 12px; font-weight: 600; opacity: 0.85; margin-bottom: 8px;
-  }
-  header.app-header h1 {
-    font-size: clamp(1.6rem, 3.6vw, 2.4rem);
-    font-weight: 700; line-height: 1.15; margin-bottom: 6px;
-  }
-  header.app-header .subtitle {
-    font-size: 1.05rem; opacity: 0.95; margin-bottom: 16px; max-width: 800px;
-  }
-  header.app-header .meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; opacity: 0.85; }
-  header.app-header .meta strong { font-weight: 600; opacity: 1; }
+        /* ===== CONSENTEMENT MODAL (ÉTAPE 1) ===== */
+        .consent-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.6); z-index:2000; justify-content:center; align-items:center; padding:16px; }
+        .consent-overlay.active { display:flex; }
+        .consent-panel { background:white; border-radius:18px; max-width:580px; width:100%; max-height:90vh; overflow-y:auto; box-shadow:0 24px 64px rgba(0,0,0,0.4); }
+        .consent-header { background:linear-gradient(135deg,#005a35,#007749); color:white; padding:24px; border-radius:18px 18px 0 0; }
+        .consent-header h2 { font-size:1.3rem; margin:0 0 8px; }
+        .consent-header p { font-size:0.9rem; opacity:0.9; margin:0; }
+        .consent-body { padding:28px; font-size:0.95rem; line-height:1.8; color:#333; }
+        .consent-section { margin-bottom:24px; }
+        .consent-section h3 { color:#007749; font-size:1.05rem; margin-bottom:10px; }
+        .consent-section p { margin-bottom:8px; }
+        .consent-checkbox-group { background:#f5f5f5; padding:18px; border-radius:10px; margin:20px 0; border-left:4px solid #007749; }
+        .consent-checkbox-group label { display:flex; align-items:flex-start; cursor:pointer; }
+        .consent-checkbox-group input[type="checkbox"] { margin-right:12px; margin-top:2px; width:20px; height:20px; cursor:pointer; accent-color:#007749; }
+        .consent-checkbox-group .checkbox-text { flex:1; }
+        .consent-checkbox-group .checkbox-text strong { color:#007749; display:block; margin-bottom:4px; }
+        .consent-footer { padding:20px 28px; background:#f9f9f9; border-radius:0 0 18px 18px; display:flex; gap:12px; justify-content:flex-end; }
+        .consent-btn { padding:12px 28px; border:none; border-radius:22px; font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.3s; }
+        .consent-btn-decline { background:#ccc; color:#333; }
+        .consent-btn-decline:hover { background:#aaa; }
+        .consent-btn-accept { background:linear-gradient(135deg,#007749,#005a35); color:white; }
+        .consent-btn-accept:hover { transform:translateY(-2px); box-shadow:0 6px 12px rgba(0,119,73,0.3); }
+        .consent-btn-accept:disabled { opacity:0.5; cursor:not-allowed; }
+        .consent-link { color:#007749; text-decoration:none; border-bottom:1px dotted #007749; cursor:pointer; }
+        .consent-link:hover { text-decoration:underline; }
 
-  .toolbar {
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 16px 24px; position: sticky; top: 0; z-index: 10;
-    box-shadow: 0 1px 4px rgba(0,0,0,.04);
-  }
-  .toolbar-inner { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; max-width: 1180px; margin: 0 auto; }
-  .search-wrap { position: relative; flex: 1 1 280px; max-width: 460px; }
-  .search-wrap input {
-    width: 100%; padding: 9px 14px 9px 38px;
-    border: 1.5px solid var(--border-strong); border-radius: var(--radius-sm);
-    font-size: 14px; font-family: inherit; background: #fff;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .search-wrap input:focus {
-    outline: none; border-color: var(--uds-green);
-    box-shadow: 0 0 0 3px rgba(0, 85, 58, 0.15);
-  }
-  .search-wrap::before {
-    content: ""; position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
-    width: 14px; height: 14px;
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23767676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='7'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>") center / contain no-repeat;
-  }
-  .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
-  .filter-label { font-size: 13px; color: var(--ink-soft); align-self: center; margin-right: 4px; font-weight: 500; }
-  .chip {
-    display: inline-flex; align-items: center; padding: 5px 12px;
-    border: 1.5px solid var(--border-strong); border-radius: 20px;
-    background: var(--surface); font-size: 12.5px; color: var(--ink-soft);
-    cursor: pointer; user-select: none; transition: all .12s ease; font-family: inherit;
-  }
-  .chip:hover { border-color: var(--ink-soft); color: var(--ink); }
-  .chip.active { background: var(--uds-green); border-color: var(--uds-green); color: #fff; font-weight: 600; }
-  .stats { font-size: 13px; color: var(--muted); margin-left: auto; }
+        /* ===== VUE CHATBOT ===== */
+        #chatbotView { width:100%; max-width:800px; display:none; }
+        #chatbotView.active { display:flex; }
+        .chat-container { width:100%; background:white; border-radius:20px; box-shadow:0 20px 60px rgba(0,0,0,0.3); overflow:hidden; display:flex; flex-direction:column; height:90vh; max-height:700px; }
+        .chat-header { background:linear-gradient(135deg,#007749,#006040); color:white; padding:25px; text-align:center; position:relative; }
+        .chat-header h1 { font-size:1.5rem; margin-bottom:8px; }
+        .chat-header p { font-size:0.9rem; opacity:0.9; }
+        .cpss-logo { font-size:0.85rem; margin-top:10px; opacity:0.8; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px; }
+        .clear-data-btn { position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.2); color:white; border:1px solid rgba(255,255,255,0.4); padding:8px 16px; border-radius:20px; font-size:0.85rem; cursor:pointer; transition:all 0.3s; }
+        .clear-data-btn:hover { background:rgba(255,255,255,0.3); }
+        .chat-messages { flex:1; overflow-y:auto; padding:25px; background:#f8f9fa; }
+        .message { margin-bottom:20px; animation:slideIn 0.3s ease-out; }
+        @keyframes slideIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+        .message.bot { display:flex; gap:12px; align-items:start; }
+        .bot-avatar { width:40px; height:40px; background:linear-gradient(135deg,#007749,#005a35); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; flex-shrink:0; }
+        .message-content { background:white; padding:15px 18px; border-radius:18px; box-shadow:0 2px 8px rgba(0,0,0,0.08); max-width:85%; line-height:1.6; }
+        .message.user .message-content { background:linear-gradient(135deg,#007749,#005a35); color:white; margin-left:auto; }
+        .message.user { display:flex; justify-content:flex-end; }
+        .competence-tag { display:inline-block; background:#e8f5ee; color:#007749; padding:4px 12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin:8px 4px 0 0; }
+        .action-cle { background:#fff8e1; border-left:4px solid #ffc107; padding:12px; margin:10px 0; border-radius:6px; font-size:0.95rem; }
+        .buttons-container { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
+        .choice-btn { background:white; border:2px solid #007749; color:#007749; padding:12px 20px; border-radius:25px; cursor:pointer; transition:all 0.3s; font-size:0.95rem; font-weight:500; flex:1; min-width:140px; text-align:center; }
+        .choice-btn:hover:not(:disabled) { background:#007749; color:white; transform:translateY(-2px); }
+        .choice-btn:disabled { opacity:0.5; cursor:not-allowed; }
+        .chat-input-area { padding:20px; background:white; border-top:1px solid #e0e0e0; display:none; }
+        .chat-input-area.active { display:block; }
+        .input-group { display:flex; gap:10px; }
+        #userInput { flex:1; padding:12px 18px; border:2px solid #e0e0e0; border-radius:25px; font-size:0.95rem; outline:none; }
+        #userInput:focus { border-color:#007749; }
+        #sendBtn { background:linear-gradient(135deg,#007749,#005a35); color:white; border:none; padding:12px 30px; border-radius:25px; cursor:pointer; font-weight:600; }
+        .typing-indicator { display:none; padding:15px; background:white; border-radius:18px; width:fit-content; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+        .typing-indicator.active { display:block; }
+        .typing-indicator span { height:8px; width:8px; background:#007749; border-radius:50%; display:inline-block; margin:0 2px; animation:typing 1.4s infinite; }
+        .typing-indicator span:nth-child(2){animation-delay:0.2s;} .typing-indicator span:nth-child(3){animation-delay:0.4s;}
+        @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.7;}30%{transform:translateY(-10px);opacity:1;}}
+        .highlight { background:#fff3cd; padding:2px 6px; border-radius:4px; font-weight:600; }
+        .situation-card { background:#f0f9f4; border-left:4px solid #CDA323; padding:15px; margin:12px 0; border-radius:8px; }
+        .situation-card h4 { color:#007749; margin-bottom:8px; }
+        .restart-btn { background:#6c757d; color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer; margin-top:15px; font-weight:500; }
+        .privacy-footer { background:#f4f9f6; border-top:1px solid #d0e8d8; padding:8px 18px; display:flex; align-items:flex-start; gap:8px; flex-shrink:0; }
+        .privacy-footer-icon { color:#007749; font-size:0.85rem; flex-shrink:0; margin-top:1px; }
+        .privacy-footer-text { font-size:0.72rem; color:#555; line-height:1.5; }
+        .privacy-footer-text strong { color:#007749; font-weight:700; }
+        .privacy-footer-link { color:#007749; text-decoration:none; border-bottom:1px dotted #007749; cursor:pointer; }
 
-  nav.tabs { background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  nav.tabs ul { list-style: none; display: flex; max-width: 1180px; margin: 0 auto; padding: 0 12px; }
-  nav.tabs button {
-    background: none; border: none; padding: 14px 16px 12px;
-    font-size: 14.5px; font-weight: 500; color: var(--ink-soft);
-    cursor: pointer; border-bottom: 3px solid transparent;
-    transition: color .15s, border-color .15s; font-family: inherit;
-    white-space: nowrap; display: inline-flex; align-items: center; gap: 8px;
-  }
-  nav.tabs button:hover { color: var(--ink); }
-  nav.tabs button.active { color: var(--uds-green); border-bottom-color: var(--uds-green); font-weight: 600; }
-  nav.tabs .tab-icon { font-size: 18px; line-height: 1; }
-  nav.tabs .tab-priorite {
-    font-size: 11px; background: var(--uds-gold-light); color: var(--uds-gold-dark);
-    padding: 2px 7px; border-radius: 10px; margin-left: 4px;
-    font-weight: 700; border: 1px solid var(--uds-gold);
-  }
+        /* Boutons header */
+        .quiz-btn-header { margin-top:12px; background:#CDA323; color:white; border:none; padding:9px 22px; border-radius:20px; cursor:pointer; font-size:0.9rem; font-weight:700; transition:all 0.25s; box-shadow:0 2px 8px rgba(0,0,0,0.18); }
+        .quiz-btn-header:hover { background:#b8911f; transform:translateY(-1px); }
+        .game-btn-header { margin-top:10px; margin-bottom:4px; background:#667eea; color:white; border:none; padding:9px 22px; border-radius:20px; cursor:pointer; font-size:0.9rem; font-weight:700; transition:all 0.25s; box-shadow:0 2px 8px rgba(0,0,0,0.18); }
+        .game-btn-header:hover { background:#5a6fd8; transform:translateY(-1px); }
 
-  main { padding: 28px 24px 80px; }
-  .activity-header {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 24px 28px; margin-bottom: 24px;
-    display: flex; gap: 20px; align-items: flex-start;
-  }
-  .activity-header .icon { font-size: 42px; line-height: 1; flex-shrink: 0; }
-  .activity-header h2 { font-size: 1.45rem; margin-bottom: 6px; color: var(--uds-green-dark); }
-  .activity-header .priorite {
-    display: inline-block; background: var(--uds-gold-light); color: var(--uds-gold-dark);
-    padding: 3px 10px; border-radius: 12px; border: 1px solid var(--uds-gold);
-    font-size: 12px; font-weight: 600; margin-bottom: 10px;
-  }
-  .activity-header p { color: var(--ink-soft); font-size: 14.5px; }
+        /* QUIZ overlay */
+        .quiz-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.55); z-index:1000; justify-content:center; align-items:center; padding:16px; }
+        .quiz-overlay.active { display:flex; }
+        .quiz-panel { background:#fff; border-radius:18px; width:100%; max-width:640px; max-height:90vh; overflow-y:auto; box-shadow:0 24px 64px rgba(0,0,0,0.35); display:flex; flex-direction:column; }
+        .quiz-header { background:linear-gradient(135deg,#005a35,#007749); color:white; padding:20px 24px 16px; border-radius:18px 18px 0 0; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .quiz-header h2 { font-size:1.15rem; margin:0; }
+        .quiz-header-meta { font-size:0.82rem; opacity:0.85; margin-top:4px; }
+        .quiz-close-btn { background:rgba(255,255,255,0.18); border:none; color:white; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; }
+        .quiz-close-btn:hover { background:rgba(255,255,255,0.32); }
+        .quiz-body { padding:22px 24px; flex:1; }
+        .quiz-progress-bar-wrap { background:#e8f5ee; border-radius:8px; height:8px; margin-bottom:18px; overflow:hidden; }
+        .quiz-progress-bar { height:100%; background:linear-gradient(90deg,#CDA323,#007749); border-radius:8px; transition:width 0.4s; }
+        .quiz-question-num { font-size:0.78rem; font-weight:700; color:#CDA323; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+        .quiz-question-text { font-size:1rem; font-weight:600; color:#1a1a1a; line-height:1.55; margin-bottom:20px; }
+        .quiz-options { display:flex; flex-direction:column; gap:10px; }
+        .quiz-option { background:#f8faf9; border:2px solid #d0e8d8; border-radius:12px; padding:13px 16px; cursor:pointer; font-size:0.93rem; color:#1a1a1a; text-align:left; transition:all 0.2s; display:flex; align-items:flex-start; gap:10px; }
+        .quiz-option-letter { font-weight:700; color:#007749; flex-shrink:0; min-width:18px; }
+        .quiz-option:hover:not(:disabled) { border-color:#007749; background:#e8f5ee; }
+        .quiz-option.correct { border-color:#007749; background:#d4f0e1; color:#004d2a; }
+        .quiz-option.wrong { border-color:#c0392b; background:#fce8e6; color:#7b1f1f; }
+        .quiz-option.reveal-correct { border-color:#007749; background:#d4f0e1; color:#004d2a; opacity:0.75; }
+        .quiz-option:disabled { cursor:not-allowed; }
+        .quiz-feedback { margin-top:16px; padding:12px 16px; border-radius:10px; font-size:0.9rem; line-height:1.5; display:none; }
+        .quiz-feedback.show { display:block; }
+        .quiz-feedback.correct-fb { background:#d4f0e1; border-left:4px solid #007749; color:#004d2a; }
+        .quiz-feedback.wrong-fb { background:#fce8e6; border-left:4px solid #c0392b; color:#7b1f1f; }
+        .quiz-nav { margin-top:20px; display:flex; justify-content:flex-end; }
+        .quiz-next-btn { background:#007749; color:white; border:none; padding:11px 28px; border-radius:22px; cursor:pointer; font-size:0.95rem; font-weight:600; display:none; }
+        .quiz-next-btn.show { display:block; }
+        .quiz-results { text-align:center; padding:10px 0 4px; display:none; }
+        .quiz-results.show { display:block; }
+        .quiz-score-circle { width:110px; height:110px; border-radius:50%; background:linear-gradient(135deg,#005a35,#007749); display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 18px; }
+        .quiz-score-num { font-size:2.2rem; font-weight:800; color:white; line-height:1; }
+        .quiz-score-denom { font-size:0.85rem; color:rgba(255,255,255,0.8); }
+        .quiz-result-title { font-size:1.3rem; font-weight:700; color:#007749; margin-bottom:8px; }
+        .quiz-result-msg { font-size:0.93rem; color:#444; margin-bottom:22px; line-height:1.5; }
+        .quiz-gold-badge { background:#CDA323; color:white; display:inline-block; padding:5px 16px; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:18px; }
+        .quiz-retry-btn { background:#CDA323; color:white; border:none; padding:12px 30px; border-radius:22px; cursor:pointer; font-size:1rem; font-weight:700; margin-right:10px; }
+        .quiz-finish-btn { background:#6c757d; color:white; border:none; padding:12px 26px; border-radius:22px; cursor:pointer; font-size:0.93rem; font-weight:600; }
+        .quiz-answers-review { text-align:left; margin-top:20px; border-top:1px solid #e0e0e0; padding-top:16px; }
+        .quiz-answers-review h4 { color:#007749; margin-bottom:12px; }
+        .review-item { background:#f8faf9; border-radius:10px; padding:10px 14px; margin-bottom:8px; font-size:0.85rem; border-left:4px solid #e0e0e0; }
+        .review-item.ok { border-left-color:#007749; }
+        .review-item.ko { border-left-color:#c0392b; }
+        .review-item .review-q { font-weight:600; color:#1a1a1a; margin-bottom:4px; }
+        .review-item .review-your { color:#c0392b; }
+        .review-item .review-correct { color:#007749; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 18px 20px; transition: all .18s ease;
-    display: flex; flex-direction: column; box-shadow: var(--shadow);
-  }
-  .card:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow-strong); }
-  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-  .card-tag { font-size: 11px; padding: 2px 9px; border-radius: 4px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
-  .card-tag.cat { color: #fff; }
-  .card-tag.type { background: #f1f1ef; color: var(--ink-soft); text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 11.5px; }
-  .card h3 { font-size: 1.02rem; line-height: 1.3; margin-bottom: 8px; color: var(--ink); }
-  .card .desc { font-size: 14px; color: var(--ink-soft); flex: 1; margin-bottom: 14px; }
-  .card .footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 10px; border-top: 1px solid var(--border); font-size: 12.5px;
-  }
-  .card .duree { color: var(--muted); }
-  .card .duree::before { content: "⏱ "; opacity: .6; }
-  .card .open-link { display: inline-flex; align-items: center; gap: 4px; color: var(--uds-green); font-weight: 600; }
-  .card .open-link::after { content: "→"; font-weight: 400; transition: transform .15s ease; }
-  .card:hover .open-link::after { transform: translateX(3px); }
+        /* PRIVACY MODAL */
+        .privacy-modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.5); z-index:1100; justify-content:center; align-items:center; padding:16px; }
+        .privacy-modal-overlay.active { display:flex; }
+        .privacy-modal { background:white; border-radius:16px; max-width:540px; width:100%; max-height:85vh; overflow-y:auto; }
+        .privacy-modal-header { background:linear-gradient(135deg,#005a35,#007749); color:white; padding:18px 22px; border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center; }
+        .privacy-modal-header h3 { margin:0; font-size:1rem; }
+        .privacy-modal-close { background:rgba(255,255,255,0.18); border:none; color:white; width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
+        .privacy-modal-body { padding:22px; font-size:0.88rem; line-height:1.7; color:#333; }
+        .privacy-modal-body h4 { color:#007749; margin:16px 0 6px; }
+        .privacy-modal-body p { margin:0 0 10px; }
+        .privacy-badge { display:inline-flex; align-items:center; gap:6px; background:#e8f5ee; color:#007749; border:1px solid #c0ddd0; border-radius:20px; padding:4px 12px; font-size:0.78rem; font-weight:700; margin:4px 4px 4px 0; }
 
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
-  .empty::before { content: "🔍"; display: block; font-size: 36px; margin-bottom: 12px; opacity: 0.6; }
+        /* ===== VUE JEU (remplace tout le body quand active) ===== */
+        #gameView {
+            display: none;
+            width: 100%;
+            max-width: 640px;
+        }
+        #gameView.active { display: block; }
 
-  footer.app-footer { background: #f1f1ef; border-top: 1px solid var(--border); padding: 28px 24px; color: var(--ink-soft); font-size: 13px; }
-  footer.app-footer .container { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-  footer.app-footer h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink); margin-bottom: 8px; font-weight: 700; }
-  footer.app-footer p, footer.app-footer ul { font-size: 12.5px; }
-  footer.app-footer ul { list-style: none; }
-  footer.app-footer li { margin-bottom: 3px; }
+        .game-card { background:white; border-radius:20px; padding:2rem; width:100%; box-shadow:0 20px 60px rgba(102,126,234,0.4); }
+        .game-title { font-size:28px; font-weight:600; background:linear-gradient(90deg,#667eea,#764ba2); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0 0 0.5rem; text-align:center; }
+        .game-subtitle { color:#666; font-size:14px; margin:0; text-align:center; }
+        .game-timer { font-size:48px; font-weight:700; color:#667eea; font-family:'Courier New',monospace; text-align:center; display:block; margin:1.5rem 0; animation:gpulse 1s ease-in-out infinite; }
+        @keyframes gpulse{0%,100%{opacity:1}50%{opacity:0.7}}
+        .game-timer.critical { color:#e74c3c; animation:none; }
+        .puzzle-section { margin:2rem 0; padding:1.5rem; background:#f8f9fa; border-radius:12px; border-left:5px solid #667eea; }
+        .puzzle-lbl { font-size:14px; font-weight:600; color:#667eea; margin:0 0 0.8rem; text-transform:uppercase; }
+        .puzzle-q { font-size:16px; color:#333; margin-bottom:1rem; line-height:1.6; }
+        .puzzle-input { width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; font-size:16px; margin-bottom:1rem; }
+        .puzzle-input:focus { outline:none; border-color:#667eea; }
+        .game-progress { display:flex; gap:8px; margin:2rem 0; justify-content:center; }
+        .game-dot { width:12px; height:12px; border-radius:50%; background:#ddd; transition:background 0.3s; }
+        .game-dot.active { background:#667eea; }
+        .game-error { margin-top:0.8rem; padding:1rem; background:#fadbd8; border-radius:8px; border-left:4px solid #e74c3c; color:#c0392b; font-weight:600; font-size:14px; }
+        .game-hint-box { margin-top:1rem; padding:1rem; background:#e8f4f8; border-radius:8px; border-left:4px solid #3498db; }
+        .game-hint-lbl { font-size:11px; font-weight:600; color:#2980b9; text-transform:uppercase; margin-bottom:0.5rem; }
+        .game-reveal { margin-top:1.5rem; padding:1rem; background:#fff3cd; border-radius:8px; border-left:4px solid #e67e22; }
+        .game-success { text-align:center; padding:2rem; }
+        @keyframes gbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+        .game-success-title { font-size:32px; font-weight:700; background:linear-gradient(90deg,#667eea,#764ba2); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0 0 1rem; }
 
-  /* === Chat Assistant === */
-  .chat-fab { position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; border-radius: 50%; background: var(--uds-green); color: white; border: none; box-shadow: 0 4px 16px rgba(0, 85, 58, 0.3); cursor: pointer; z-index: 50; transition: all .2s ease; display: flex; align-items: center; justify-content: center; }
-  .chat-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 85, 58, 0.4); }
-  .chat-fab svg { width: 26px; height: 26px; }
-  .chat-fab.hidden { transform: scale(0); pointer-events: none; }
-  .chat-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 460px; background: var(--surface); box-shadow: -8px 0 32px rgba(0,0,0,.12); transform: translateX(100%); transition: transform .25s ease; z-index: 100; display: flex; flex-direction: column; }
-  .chat-panel.open { transform: translateX(0); }
-  .chat-header { background: var(--uds-green); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-  .chat-header h3 { font-size: 16px; font-weight: 600; }
-  .close-btn { background: rgba(255,255,255,.15); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 22px; line-height: 1; transition: background .15s; display: flex; align-items: center; justify-content: center; }
-  .close-btn:hover { background: rgba(255,255,255,.28); }
-  .chat-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-  .chat-setup { padding: 24px 20px; }
-  .chat-setup h4 { font-size: 15px; color: var(--uds-green-dark); margin-bottom: 8px; }
-  .chat-setup p, .chat-setup .help { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
-  .chat-setup .help { background: var(--uds-gold-light); border: 1px solid var(--uds-gold); padding: 10px 12px; border-radius: 6px; color: var(--uds-gold-dark); }
-  .chat-setup label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
-  .chat-setup input, .chat-setup select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border-strong); border-radius: 6px; font-family: inherit; font-size: 14px; margin-bottom: 14px; background: white; }
-  .chat-setup input:focus, .chat-setup select:focus { outline: none; border-color: var(--uds-green); box-shadow: 0 0 0 3px rgba(0, 85, 58, 0.15); }
-  .chat-setup .btn-primary { width: 100%; padding: 11px 16px; background: var(--uds-green); color: white; border: none; border-radius: 6px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s; }
-  .chat-setup .btn-primary:hover { background: var(--uds-green-dark); }
-  .chat-conversation { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-  .chat-messages { flex: 1; overflow-y: auto; padding: 16px; }
-  .message { margin-bottom: 14px; }
-  .message-role { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; color: var(--muted); }
-  .message.user .message-role { color: var(--uds-green-dark); }
-  .message.assistant .message-role { color: var(--uds-gold-dark); }
-  .message-content { padding: 10px 14px; border-radius: 8px; font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-wrap; word-wrap: break-word; }
-  .message.user .message-content { background: var(--uds-green-light); border-left: 3px solid var(--uds-green); }
-  .message.assistant .message-content { background: #f8f8f6; border-left: 3px solid var(--uds-gold); }
-  .message-content a { color: var(--uds-green); text-decoration: underline; }
-  .message.thinking .message-content { color: var(--muted); font-style: italic; background: #f8f8f6; border-left-color: var(--border-strong); }
-  .message.error .message-content { background: #fdecea; border-left-color: #d73a3a; color: #6b1f1f; }
-  .chat-suggestions { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 6px; }
-  .chat-suggestions h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
-  .suggestion { padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--ink-soft); cursor: pointer; text-align: left; font-family: inherit; transition: all .12s; }
-  .suggestion:hover { background: var(--uds-green-light); border-color: var(--uds-green); color: var(--uds-green-dark); }
-  .chat-input-area { border-top: 1px solid var(--border); padding: 12px 16px; background: var(--surface); flex-shrink: 0; }
-  .chat-input-wrap { display: flex; gap: 8px; align-items: flex-end; }
-  .chat-input-area textarea { flex: 1; border: 1.5px solid var(--border-strong); border-radius: 8px; padding: 9px 12px; font-family: inherit; font-size: 14px; resize: none; min-height: 40px; max-height: 120px; }
-  .chat-input-area textarea:focus { outline: none; border-color: var(--uds-green); box-shadow: 0 0 0 3px rgba(0, 85, 58, 0.15); }
-  .chat-send { background: var(--uds-green); color: white; border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background .15s; }
-  .chat-send:hover:not(:disabled) { background: var(--uds-green-dark); }
-  .chat-send:disabled { background: var(--border-strong); cursor: not-allowed; }
-  .chat-send svg { width: 18px; height: 18px; }
-  .chat-controls { display: flex; gap: 6px; margin-top: 8px; }
-  .chat-controls button { background: none; border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px; color: var(--muted); cursor: pointer; font-family: inherit; font-size: 11px; }
-  .chat-controls button:hover { color: var(--ink); border-color: var(--ink-soft); }
-  .privacy-footer { background: #f4f9f6; border-top: 1px solid #d0e8d8; padding: 10px 16px; display: flex; align-items: flex-start; gap: 8px; flex-shrink: 0; }
-  .privacy-footer-icon { color: var(--uds-green); font-size: 0.85rem; flex-shrink: 0; margin-top: 2px; }
-  .privacy-footer-text { font-size: 0.72rem; color: #666; line-height: 1.5; }
-  .privacy-footer-text strong { color: var(--uds-green); font-weight: 700; }
-  .privacy-footer-link { color: var(--uds-green); text-decoration: none; border-bottom: 1px dotted var(--uds-green); cursor: pointer; }
-  .privacy-footer-link:hover { opacity: 0.8; }
-  .privacy-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1100; justify-content: center; align-items: center; padding: 16px; }
-  .privacy-modal-overlay.active { display: flex; }
-  .privacy-modal { background: white; border-radius: 12px; max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
-  .privacy-modal-header { background: linear-gradient(135deg, var(--uds-green), var(--uds-green-dark)); color: white; padding: 20px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; align-items: center; }
-  .privacy-modal-header h3 { margin: 0; font-size: 1rem; font-weight: 600; }
-  .privacy-modal-close { background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-  .privacy-modal-close:hover { background: rgba(255, 255, 255, 0.35); }
-  .privacy-modal-body { padding: 24px; font-size: 0.9rem; line-height: 1.7; color: #333; }
-  .privacy-modal-body h4 { color: var(--uds-green); margin: 18px 0 10px; font-size: 0.95rem; font-weight: 600; }
-  .privacy-modal-body p { margin: 0 0 12px; }
-  .privacy-badge { display: inline-flex; align-items: center; gap: 4px; background: #e8f5ee; color: var(--uds-green); border: 1px solid #c0ddd0; border-radius: 20px; padding: 5px 12px; font-size: 0.75rem; font-weight: 700; margin: 4px 4px 4px 0; }
-  .consent-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 2000; justify-content: center; align-items: center; padding: 16px; }
-  .consent-modal-overlay.active { display: flex; }
-  .consent-modal { background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4); }
-  .consent-header { background: linear-gradient(135deg, var(--uds-green), var(--uds-green-dark)); color: white; padding: 24px; border-radius: 12px 12px 0 0; }
-  .consent-header h2 { margin: 0; font-size: 1.3rem; font-weight: 600; }
-  .consent-body { padding: 24px; font-size: 0.95rem; line-height: 1.7; color: #333; }
-  .consent-body h3 { color: var(--uds-green); margin: 16px 0 10px; font-size: 1rem; font-weight: 600; }
-  .consent-body p { margin: 0 0 12px; }
-  .consent-body ul { margin: 12px 0; padding-left: 20px; }
-  .consent-body li { margin: 6px 0; }
-  .consent-checkbox-group { background: #f8f9fa; padding: 16px; border-radius: 8px; margin: 16px 0; border-left: 4px solid var(--uds-green); }
-  .consent-checkbox-group label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
-  .consent-checkbox-group input[type="checkbox"] { margin-top: 4px; cursor: pointer; }
-  .consent-footer { padding: 16px 24px; border-top: 1px solid #e0e0e0; display: flex; gap: 10px; justify-content: flex-end; }
-  .consent-btn-reject { background: #6c757d; color: white; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-  .consent-btn-reject:hover { background: #5a6268; }
-  .consent-btn-accept { background: var(--uds-green); color: white; border: none; padding: 11px 24px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: background 0.2s; }
-  .consent-btn-accept:hover:not(:disabled) { background: var(--uds-green-dark); }
-  .consent-btn-accept:disabled { opacity: 0.5; cursor: not-allowed; }
-  .clear-data-btn { background: #c0392b; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s; }
-  .clear-data-btn:hover { background: #a93226; }
-  .recommended-bar { background: var(--uds-gold-light); border-top: 2px solid var(--uds-gold); padding: 12px 16px; display: none; justify-content: space-between; align-items: center; flex-shrink: 0; }
-  .recommended-bar.active { display: flex; }
-  .recommended-bar .count { font-size: 13px; color: var(--uds-gold-dark); font-weight: 600; }
-  .recommended-bar button { background: var(--uds-gold-dark); color: white; border: none; padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .recommended-bar button:hover { background: #6d5210; }
-
-  /* === Modal === */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 200; padding: 24px; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: white; border-radius: 12px; max-width: 760px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
-  .modal-header { background: var(--uds-green); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-  .modal-header h3 { font-size: 16px; font-weight: 600; }
-  .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
-  .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); background: #fafaf9; display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
-  .modal-footer button { padding: 9px 16px; border-radius: 6px; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; }
-  .modal-footer .btn-secondary { background: white; border-color: var(--border-strong); color: var(--ink-soft); }
-  .modal-footer .btn-secondary:hover { border-color: var(--ink-soft); color: var(--ink); }
-  .modal-footer .btn-primary { background: var(--uds-green); color: white; border-color: var(--uds-green); }
-  .modal-footer .btn-primary:hover { background: var(--uds-green-dark); border-color: var(--uds-green-dark); }
-  .modal-footer .btn-gold { background: var(--uds-gold); color: var(--uds-gold-dark); border-color: var(--uds-gold); }
-  .modal-footer .btn-gold:hover { background: #d99a1c; }
-  .synthesis-preview { background: white; padding: 4px; }
-  .synthesis-preview h2 { font-size: 1.45rem; color: var(--uds-green-dark); margin-bottom: 4px; }
-  .synthesis-preview .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
-  .synthesis-preview .context-edit { width: 100%; border: 1.5px dashed var(--border-strong); border-radius: 6px; padding: 10px 12px; font-family: inherit; font-size: 14px; line-height: 1.5; margin-bottom: 20px; resize: vertical; min-height: 70px; }
-  .synthesis-preview .context-edit:focus { outline: none; border-color: var(--uds-green); border-style: solid; }
-  .synthesis-preview h3 { font-size: 14px; color: var(--uds-green-dark); margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1.5px solid var(--uds-gold); }
-  .synthesis-preview h4 { font-size: 12px; margin: 10px 0 6px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em; }
-  .synthesis-resource { background: var(--bg); padding: 12px 36px 12px 14px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid var(--uds-green); position: relative; }
-  .synthesis-resource .res-title { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
-  .synthesis-resource .res-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .synthesis-resource .res-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
-  .synthesis-resource .res-url { font-size: 11px; color: var(--uds-green); word-break: break-all; margin-top: 4px; }
-  .synthesis-resource .remove-btn { position: absolute; top: 8px; right: 8px; background: white; border: 1px solid var(--border-strong); color: var(--muted); width: 22px; height: 22px; border-radius: 11px; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-  .synthesis-resource .remove-btn:hover { background: #fdecea; border-color: #d73a3a; color: #d73a3a; }
-
-  @media print {
-    .toolbar, nav.tabs, .filter-group, .stats, footer.app-footer,
-    .chat-fab, .chat-panel, .modal-overlay { display: none !important; }
-    .activity-section { page-break-before: always; }
-    .activity-section:first-of-type { page-break-before: auto; }
-    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .card { box-shadow: none !important; transform: none !important; }
-    body { background: #fff; }
-    .card .open-link::after { content: " (" attr(href) ")"; font-size: 10px; }
-  }
-  @media (max-width: 640px) {
-    .activity-header { flex-direction: column; }
-    .activity-header .icon { font-size: 32px; }
-    .toolbar-inner { gap: 10px; }
-    .stats { width: 100%; text-align: right; }
-    .chat-panel { max-width: 100%; }
-    .chat-fab { bottom: 16px; right: 16px; width: 52px; height: 52px; }
-    .modal { max-height: 100vh; border-radius: 0; }
-    .modal-overlay { padding: 0; }
-  }
-</style>
+        /* Success toast */
+        .success-toast { position:fixed; bottom:20px; right:20px; background:#4caf50; color:white; padding:16px 24px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.2); animation:slideUp 0.3s ease-out; z-index:3000; }
+        @keyframes slideUp { from{transform:translateY(100%); opacity:0;} to{transform:translateY(0); opacity:1;} }
+    </style>
 </head>
 <body>
 
-<header class="app-header" role="banner">
-  <div class="container">
-    <div class="eyebrow">Faculté de médecine et des sciences de la santé · Université de Sherbrooke</div>
-    <h1>Trousse pédagogique Moodle — Microprogramme GDL</h1>
-    <p class="subtitle">Ressources curées pour les 5 activités prioritaires identifiées par la collecte des besoins. Diffusable à l'équipe enseignante du microprogramme Gestion de la douleur ; transférable au reste de la FMSS.</p>
-    <div class="meta">
-      <span><strong>Cible :</strong> 6 enseignant·es GDL 101 / 201 / 301</span>
-      <span><strong>Vague 1 :</strong> mai → août 2026</span>
-      <span><strong>Date :</strong> mai 2026</span>
-    </div>
-  </div>
-</header>
+<!-- ===== MODAL CONSENTEMENT (ÉTAPE 1) ===== -->
+<div class="consent-overlay active" id="consentOverlay">
+    <div class="consent-panel">
+        <div class="consent-header">
+            <h2>🔒 Consentement — Utilisation du chatbot IA</h2>
+            <p>Avant de continuer, veuillez lire et accepter</p>
+        </div>
+        <div class="consent-body">
+            <div class="consent-section">
+                <h3>ℹ️ Informations importantes</h3>
+                <p>Cette trousse pédagogique utilise <strong>Claude (Anthropic)</strong> pour vous fournir des recommandations pédagogiques intelligentes.</p>
+                <p><strong style="color:#e74c3c;">Vos questions seront transmises aux serveurs d'Anthropic (États-Unis)</strong> de manière chiffrée (HTTPS) via un serveur intermédiaire sécurisé (Netlify).</p>
+            </div>
 
-<div class="toolbar" role="region" aria-label="Recherche et filtres">
-  <div class="toolbar-inner">
-    <div class="search-wrap">
-      <input type="search" id="search" placeholder="Rechercher dans toutes les ressources…" aria-label="Recherche dans les ressources">
+            <div class="consent-section">
+                <h3>✅ Sécurité et suppression des données</h3>
+                <p><strong>Données supprimées automatiquement :</strong> Vos données sont supprimées immédiatement après chaque utilisation du chatbot. Aucune donnée n'est conservée sur nos serveurs Netlify.</p>
+                <p><strong>Communication chiffrée :</strong> Toutes les communications sont protégées par chiffrement HTTPS.</p>
+                <p><strong>Aucune donnée personnelle requise :</strong> Vous pouvez utiliser cette trousse de façon entièrement anonyme. Ne partagez pas d'informations sensibles.</p>
+            </div>
+
+            <div class="consent-section">
+                <h3>📋 Vos droits selon la Loi 25 (Québec)</h3>
+                <ul style="margin-left:20px;">
+                    <li><strong>Droit d'accès :</strong> Vous pouvez demander à voir vos données</li>
+                    <li><strong>Droit de rectification :</strong> Vous pouvez corriger vos données</li>
+                    <li><strong>Droit à l'oubli :</strong> Vous pouvez supprimer vos données locales via le bouton « Effacer toutes mes données »</li>
+                    <li><strong>Droit de connaître les transferts :</strong> Vos données sont traitées par Anthropic (États-Unis) conformément à sa politique de confidentialité</li>
+                </ul>
+            </div>
+
+            <div class="consent-section">
+                <h3>📧 Contact — Questions sur la confidentialité</h3>
+                <p><strong>Université de Sherbrooke — Responsable de la protection des renseignements personnels :</strong></p>
+                <p>📧 <a href="mailto:rprp@usherbrooke.ca" class="consent-link">rprp@usherbrooke.ca</a></p>
+                <p><strong>Centre de pédagogie des sciences de la santé (CPSS) :</strong></p>
+                <p>👤 Benoît Laforest<br>📧 <a href="mailto:benoit.laforest@usherbrooke.ca" class="consent-link">benoit.laforest@usherbrooke.ca</a></p>
+            </div>
+
+            <div class="consent-checkbox-group">
+                <label>
+                    <input type="checkbox" id="consentCheckbox">
+                    <div class="checkbox-text">
+                        <strong>J'ai lu et j'accepte que mes questions soient transmises à Anthropic (États-Unis)</strong>
+                        <p style="font-size:0.9rem; margin:6px 0 0; color:#666;">
+                            Je confirme avoir lu les informations ci-dessus et accepter que mes questions et réponses soient traitées par Anthropic conformément à sa politique de confidentialité. Je comprends que mes données seront supprimées après chaque utilisation et que j'ai le droit de les supprimer localement via le bouton prévu à cet effet.
+                        </p>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="consent-footer">
+            <button class="consent-btn consent-btn-decline" onclick="declineConsent()">Refuser et quitter</button>
+            <button class="consent-btn consent-btn-accept" id="acceptBtn" onclick="acceptConsent()" disabled>Accepter et continuer</button>
+        </div>
     </div>
-    <div class="filter-group" role="group" aria-label="Filtres par source">
-      <span class="filter-label">Source :</span>
-      <button class="chip filter-cat active" data-cat="all" aria-pressed="true">Toutes</button>
-      <span id="cat-chips"></span>
-    </div>
-    <div class="stats" id="stats"></div>
-  </div>
 </div>
 
-<nav class="tabs" role="navigation" aria-label="Activités">
-  <ul id="tab-list" role="tablist"></ul>
-</nav>
-
-<main id="main-content" role="main"></main>
-
-<footer class="app-footer" role="contentinfo">
-  <div class="container">
-    <div>
-      <h4>À propos</h4>
-      <p>Cette trousse a été produite dans le cadre du plan de transition Moodle du microprogramme Gestion de la douleur (GDL).<br>Elle accompagne le rapport d'analyse des besoins, le plan de formation par fiches et le calendrier opérationnel.</p>
+<!-- ===== VUE CHATBOT ===== -->
+<div id="chatbotView">
+<div class="chat-container">
+    <div class="chat-header">
+        <h1>🎓 Conseiller Pédagogique Virtuel</h1>
+        <p>Référentiel de compétence pédagogique - FMSS</p>
+        <div class="cpss-logo">Centre de Pédagogie des Sciences de la Santé (CPSS)</div>
+        <button class="game-btn-header" onclick="openGame()">🎮 Jeu d'évasion</button>
+        <button class="quiz-btn-header" onclick="openQuiz()">🎯 Quiz du référentiel</button>
+        <button class="clear-data-btn" onclick="clearAllData()" title="Supprimer vos données locales">🗑️ Effacer mes données</button>
     </div>
-    <div>
-      <h4>Pour aller plus loin</h4>
-      <ul>
-        <li><a href="https://www.usherbrooke.ca/cpss/fr/" target="_blank" rel="noopener">CPSS — Centre de pédagogie des sciences de la santé</a></li>
-        <li><a href="https://www.usherbrooke.ca/ssf/" target="_blank" rel="noopener">SSF — Service de soutien à la formation</a></li>
-        <li><a href="https://wiki.usherbrooke.ca/display/MOODLE/Aide+pour+l'enseignant" target="_blank" rel="noopener">Wiki Moodle UdeS — Aide enseignant</a></li>
-      </ul>
+
+    <!-- QUIZ MODAL -->
+    <div class="quiz-overlay" id="quizOverlay">
+        <div class="quiz-panel">
+            <div class="quiz-header">
+                <div><h2>🎯 Quiz — Référentiel FMSS</h2><div class="quiz-header-meta">5 questions · Anonyme · Résultats non transmis</div></div>
+                <button class="quiz-close-btn" onclick="closeQuiz()">✕</button>
+            </div>
+            <div class="quiz-body">
+                <div id="quizQuestionScreen">
+                    <div class="quiz-progress-bar-wrap"><div class="quiz-progress-bar" id="quizProgressBar" style="width:0%"></div></div>
+                    <div class="quiz-question-num" id="quizQuestionNum">Question 1 / 5</div>
+                    <div class="quiz-question-text" id="quizQuestionText"></div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div class="quiz-feedback" id="quizFeedback"></div>
+                    <div class="quiz-nav"><button class="quiz-next-btn" id="quizNextBtn" onclick="nextQuestion()">Suivant →</button></div>
+                </div>
+                <div class="quiz-results" id="quizResultsScreen">
+                    <div class="quiz-score-circle"><div class="quiz-score-num" id="quizScoreNum">0</div><div class="quiz-score-denom">/ 5</div></div>
+                    <div class="quiz-result-title" id="quizResultTitle"></div>
+                    <div class="quiz-gold-badge" id="quizGoldBadge"></div>
+                    <div class="quiz-result-msg" id="quizResultMsg"></div>
+                    <div><button class="quiz-retry-btn" onclick="retryQuiz()">🔄 Nouvelles questions</button><button class="quiz-finish-btn" onclick="closeQuiz()">Fermer</button></div>
+                    <div class="quiz-answers-review" id="quizAnswersReview"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-      <h4>Méthodologie</h4>
-      <p>Curation par recherche systématique sur sources publiques UdeS (CPSS, SSF, Wiki Moodle), universités québécoises, documentation Moodle officielle FR, et ressources francophones internationales.<br>Mise à jour : mai 2026.</p>
+
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area" id="inputArea">
+        <div class="input-group">
+            <input type="text" id="userInput" placeholder="Tapez votre réponse...">
+            <button id="sendBtn">Envoyer</button>
+        </div>
     </div>
-  </div>
-</footer>
-
-<button class="chat-fab" id="chat-fab" aria-label="Ouvrir l'assistant pédagogique" title="Discuter avec l'assistant">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-</button>
-
-<aside class="chat-panel" id="chat-panel" aria-hidden="true" role="dialog" aria-label="Assistant pédagogique">
-  <header class="chat-header">
-    <h3>💬 Assistant pédagogique</h3>
-    <button class="close-btn" id="chat-close" aria-label="Fermer l'assistant">×</button>
-  </header>
-  <div class="chat-body" id="chat-body"></div>
-</aside>
-
-<div class="modal-overlay" id="modal-overlay" aria-hidden="true">
-  <div class="modal" role="dialog" aria-labelledby="modal-title">
-    <header class="modal-header">
-      <h3 id="modal-title">📋 Fiche-synthèse de ressources</h3>
-      <button class="close-btn" id="modal-close" aria-label="Fermer">×</button>
-    </header>
-    <div class="modal-body" id="modal-body"></div>
-    <footer class="modal-footer">
-      <button class="btn-secondary" id="modal-cancel">Fermer</button>
-      <button class="btn-gold" id="export-pdf">📄 Exporter PDF</button>
-      <button class="btn-primary" id="export-docx">📝 Exporter Word</button>
-    </footer>
-  </div>
+    <div class="privacy-footer">
+        <span class="privacy-footer-icon">🔒</span>
+        <span class="privacy-footer-text">
+            <strong>Confidentialité :</strong> Données supprimées après chaque utilisation — aucune conservation — conforme Loi 25.
+            <span class="privacy-footer-link" onclick="openPrivacyModal()">En savoir plus</span>
+        </span>
+    </div>
+</div>
 </div>
 
-<!-- MODAL CONSENTEMENT (LOI 25) -->
-<div class="consent-modal-overlay" id="consentModalOverlay">
-  <div class="consent-modal">
-    <div class="consent-header">
-      <h2>🔒 Consentement — Utilisation du chatbot</h2>
+<!-- ===== VUE JEU D'ÉVASION (même niveau que chatbotView) ===== -->
+<div id="gameView">
+    <div class="game-card">
+        <div style="margin-bottom:1rem;">
+            <button onclick="closeGame()" style="background:linear-gradient(90deg,#95a5a6,#7f8c8d);color:white;padding:10px 16px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">← Retour à l'app</button>
+        </div>
+        <div id="gameContent">
+            <h1 class="game-title">🔐 La Chambre des Compétences</h1>
+            <p class="game-subtitle">Résous les énigmes pédagogiques pour te libérer!</p>
+            <div class="game-timer" id="gameTimer">5:00</div>
+            <div class="game-progress" id="gameProgress"></div>
+            <div id="gamePuzzles"></div>
+        </div>
+        <div id="gameSuccess" style="display:none;">
+            <div class="game-success">
+                <div style="font-size:80px;animation:gbounce 1s ease-in-out infinite;">✨🎉</div>
+                <h1 class="game-success-title">Liberé(e)!</h1>
+                <p style="color:#666;margin:0 0 2rem;">Tu as déverrouillé toutes les compétences en <span id="gameFinalTime">5:00</span>. Bravo!</p>
+                <button onclick="restartGame()" style="background:linear-gradient(90deg,#667eea,#764ba2);color:white;padding:12px 32px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;margin-right:10px;">🔄 Rejouer</button>
+                <button onclick="closeGame()" style="background:#95a5a6;color:white;padding:12px 32px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;">← Retour</button>
+            </div>
+        </div>
     </div>
-    <div class="consent-body">
-      <h3>Avant de continuer, veuillez lire les informations suivantes :</h3>
-
-      <p><strong>Cette trousse pédagogique utilise Claude (Anthropic)</strong> pour vous fournir des recommandations intelligentes. Vos questions seront <strong>transmises aux serveurs d'Anthropic (États-Unis)</strong> de manière chiffrée.</p>
-
-      <h3>Vos droits selon la Loi 25 :</h3>
-      <ul>
-        <li><strong>Droit d'accès :</strong> Vous pouvez accéder à vos données</li>
-        <li><strong>Droit de rectification :</strong> Vous pouvez corriger vos données</li>
-        <li><strong>Droit à l'oubli :</strong> Vous pouvez supprimer vos données locales (bouton "Effacer toutes mes données")</li>
-        <li><strong>Droit de connaître les transferts :</strong> Vos données sont traitées par Anthropic aux États-Unis</li>
-      </ul>
-
-      <h3>Sécurité :</h3>
-      <p>Vos communications sont <strong>chiffrées (HTTPS)</strong> et transmises via un serveur intermédiaire sécurisé (Netlify). Aucune donnée personnelle identifiante n'est requise pour utiliser cette trousse.</p>
-
-      <h3>Important :</h3>
-      <p><strong>Ne partagez pas de données personnelles sensibles</strong> (numéros d'ID, adresses, numéros de téléphone, etc.). Anonymisez toute information avant de la partager.</p>
-
-      <div class="consent-checkbox-group">
-        <label>
-          <input type="checkbox" id="consent-checkbox">
-          <span>J'ai lu et j'accepte que mes questions soient transmises à Anthropic (États-Unis) conformément à la Loi 25 du Québec. J'ai compris mes droits d'accès et de suppression de mes données.</span>
-        </label>
-      </div>
-
-      <p style="font-size: 0.85rem; color: #666;">
-        <strong>Politique de confidentialité :</strong>
-        <a href="https://www.usherbrooke.ca/decouvrir/a-propos/protection-des-renseignements-personnels" target="_blank" style="color: var(--uds-green); text-decoration: none; border-bottom: 1px dotted var(--uds-green);">Lire la politique UdeS</a>
-      </p>
-    </div>
-    <div class="consent-footer">
-      <button class="consent-btn-reject" onclick="rejectConsent()">Refuser et quitter</button>
-      <button class="consent-btn-accept" id="acceptBtn" onclick="acceptConsent()" disabled>Accepter et continuer</button>
-    </div>
-  </div>
 </div>
 
-<!-- MODAL CONFIDENTIALITÉ (LOI 25) -->
+<!-- MODAL CONFIDENTIALITÉ -->
 <div class="privacy-modal-overlay" id="privacyModalOverlay">
-  <div class="privacy-modal">
-    <div class="privacy-modal-header">
-      <h3>🔒 Confidentialité et Loi 25</h3>
-      <button class="privacy-modal-close" onclick="closePrivacyModal()">✕</button>
+    <div class="privacy-modal">
+        <div class="privacy-modal-header">
+            <h3>🔒 Confidentialité et Loi 25</h3>
+            <button class="privacy-modal-close" onclick="closePrivacyModal()">✕</button>
+        </div>
+        <div class="privacy-modal-body">
+            <div><span class="privacy-badge">✓ Anonyme</span><span class="privacy-badge">✓ Données supprimées</span><span class="privacy-badge">✓ Claude API</span><span class="privacy-badge">✓ Conforme Loi 25</span></div>
+
+            <h4>🔐 Utilisation de Claude API (Anthropic)</h4>
+            <p>Cette trousse utilise <strong>Claude (Anthropic)</strong> pour fournir des recommandations pédagogiques. Vos questions sont envoyées aux serveurs d'Anthropic (États-Unis) de manière chiffrée.</p>
+
+            <h4>📊 Suppression des données</h4>
+            <p><strong>Aucune conservation :</strong> Vos données sont supprimées immédiatement après chaque utilisation du chatbot. Aucun historique n'est conservé sur nos serveurs Netlify.</p>
+
+            <h4>🛡️ Sécurité</h4>
+            <p>Toutes les communications sont chiffrées (HTTPS). Votre clé API n'est jamais visible et est stockée uniquement sur le serveur.</p>
+
+            <h4>📋 Conformité à la Loi 25 (Québec)</h4>
+            <p>Cette application respecte la Loi 25 sur la protection des renseignements personnels :</p>
+            <ul style="margin-left:20px;">
+                <li><strong>Droit d'accès :</strong> Contactez <a href="mailto:rprp@usherbrooke.ca" class="privacy-footer-link">rprp@usherbrooke.ca</a></li>
+                <li><strong>Droit de rectification :</strong> Contactez l'adresse ci-dessus</li>
+                <li><strong>Droit à l'oubli :</strong> Utilisez le bouton « Effacer toutes mes données »</li>
+            </ul>
+
+            <h4>📧 Questions</h4>
+            <p><strong>UdeS — Responsable de la protection des renseignements personnels :</strong><br>
+            <a href="mailto:rprp@usherbrooke.ca" class="privacy-footer-link">rprp@usherbrooke.ca</a></p>
+            <p><strong>CPSS — Centre de pédagogie des sciences de la santé :</strong><br>
+            👤 Benoît Laforest<br>
+            📧 <a href="mailto:benoit.laforest@usherbrooke.ca" class="privacy-footer-link">benoit.laforest@usherbrooke.ca</a></p>
+        </div>
     </div>
-    <div class="privacy-modal-body">
-      <div style="margin-bottom: 12px;">
-        <span class="privacy-badge">✓ Chiffré</span>
-        <span class="privacy-badge">✓ Sécurisé</span>
-        <span class="privacy-badge">✓ Conforme Loi 25</span>
-      </div>
-
-      <h4>Le chatbot et Claude API (Anthropic)</h4>
-      <p>Cette trousse utilise <strong>Claude</strong> (Anthropic) pour fournir des recommandations pédagogiques intelligentes. Vos questions et l'historique de conversation sont <strong>transmis de manière chiffrée</strong> aux serveurs d'Anthropic via un serveur intermédiaire sécurisé (Netlify).</p>
-
-      <h4>Sécurité et transmission</h4>
-      <p><strong>Votre clé API n'est jamais visible.</strong> Elle est stockée uniquement dans les variables d'environnement du serveur et n'est jamais partagée avec vous. Toute communication est <strong>chiffrée (HTTPS)</strong>.</p>
-
-      <h4>Conformité à la Loi 25 du Québec</h4>
-      <p>Anthropic (États-Unis) traite vos messages selon sa politique de confidentialité. <strong>Aucune donnée personnelle identifiante n'est requise.</strong> Utilisez cette trousse de manière <strong>anonyme</strong>. Si vous mentionnez des données personnelles, veuillez les <strong>anonymiser.</strong></p>
-
-      <h4>Recommandations institutionnelles</h4>
-      <p>Pour un déploiement à grande échelle, l'<strong>Université de Sherbrooke recommande de faire valider l'EFVP</strong> (Évaluation des facteurs relatifs aux vies privées) par votre <strong>Bureau de la protection des renseignements personnels.</strong></p>
-
-      <h4>Questions ?</h4>
-      <p><strong>Centre de pédagogie des sciences de la santé (CPSS)</strong><br>
-      👤 Benoît Laforest<br>
-      ✉️ benoit.laforest@usherbrooke.ca</p>
-    </div>
-  </div>
 </div>
 
 <script>
-const DATA = {
-  "_meta": {
-    "version": "1.1",
-    "date": "2026-05-13",
-    "auteur": "Conseil pédagogique FMSS — UdS",
-    "description": "Curation de ressources pédagogiques publiques pour la transition Moodle du microprogramme GDL. Enrichissement SSF & YouTube mai 2026."
-  },
-  "categories_ressources": [
-    {
-      "id": "uds",
-      "label": "UdeS ⭐ Prioritaire",
-      "couleur": "#00553A",
-      "description": "Université de Sherbrooke (CPSS, SSF, Wiki Moodle) — À privilégier"
-    },
-    {
-      "id": "youtube",
-      "label": "YouTube",
-      "couleur": "#FF0000",
-      "description": "Tutoriels et ressources vidéo francophones"
-    },
-    {
-      "id": "qc",
-      "label": "Universités québécoises",
-      "couleur": "#1F3864",
-      "description": "ULaval, UdeM, UQAM"
-    },
-    {
-      "id": "moodle",
-      "label": "Documentation Moodle officielle",
-      "couleur": "#F88D2A",
-      "description": "docs.moodle.org en français"
-    },
-    {
-      "id": "fr",
-      "label": "Francophonie internationale",
-      "couleur": "#2E75B6",
-      "description": "Belgique, France, Suisse"
-    },
-    {
-      "id": "theorie",
-      "label": "Cadres théoriques",
-      "couleur": "#7030A0",
-      "description": "Mayer, andragogie, multimédia"
-    },
-    {
-      "id": "qc_fad",
-      "label": "Réseaux QC FAD",
-      "couleur": "#548235",
-      "description": "RÉCIT, Pôle interordres, Éductive"
+// ==========================================
+// GESTION DU CONSENTEMENT (ÉTAPE 1)
+// ==========================================
+document.getElementById('consentCheckbox').addEventListener('change', function() {
+    document.getElementById('acceptBtn').disabled = !this.checked;
+});
+
+function acceptConsent() {
+    sessionStorage.setItem('consentAccepted', 'true');
+    document.getElementById('consentOverlay').classList.remove('active');
+    document.getElementById('chatbotView').classList.add('active');
+    setTimeout(initConversation, 500);
+}
+
+function declineConsent() {
+    alert('Vous devez accepter les conditions pour utiliser cette trousse.\n\nPour plus d\'informations, contactez :\nrprp@usherbrooke.ca');
+    window.location.href = 'https://www.usherbrooke.ca/decouvrir/a-propos/protection-des-renseignements-personnels';
+}
+
+// Vérifier le consentement au chargement
+function checkConsent() {
+    const consented = sessionStorage.getItem('consentAccepted');
+    if (!consented) {
+        document.getElementById('consentOverlay').classList.add('active');
+    } else {
+        document.getElementById('consentOverlay').classList.remove('active');
+        document.getElementById('chatbotView').classList.add('active');
+        setTimeout(initConversation, 500);
     }
-  ],
-  "types_ressources": [
-    {
-      "id": "autoformation",
-      "label": "Autoformation"
-    },
-    {
-      "id": "guide",
-      "label": "Guide écrit"
-    },
-    {
-      "id": "video",
-      "label": "Tutoriel vidéo"
-    },
-    {
-      "id": "documentation",
-      "label": "Documentation officielle"
-    },
-    {
-      "id": "wiki",
-      "label": "Wiki institutionnel"
-    },
-    {
-      "id": "service",
-      "label": "Service / Soutien"
-    },
-    {
-      "id": "podcast_exemple",
-      "label": "Podcast modèle"
-    },
-    {
-      "id": "article",
-      "label": "Article / billet"
-    },
-    {
-      "id": "micro_parcours",
-      "label": "Micro-parcours"
+}
+
+// Fonction pour effacer toutes les données
+function clearAllData() {
+    if (confirm('Êtes-vous sûr de vouloir effacer toutes vos données locales?\n\nCela supprimera:\n- Votre historique de conversation\n- Vos données locales stockées\n\nAction irréversible.')) {
+        sessionStorage.clear();
+        localStorage.clear();
+        showSuccessToast('✓ Vos données locales ont été supprimées');
+        setTimeout(() => location.reload(), 1500);
     }
-  ],
-  "activites": [
-    {
-      "id": "capsule_video",
-      "titre": "Capsule vidéo pédagogique",
-      "icone": "🎬",
-      "ecart_priorite": "+2,83 (1er rang)",
-      "intro": "Activité phare du plan : intérêt unanime maximal (5/5) et faible maîtrise (2,17/5). Cinq enseignant·es sur six souhaitent une formation. Production typique : 3 à 10 minutes, scénario, captation, montage, dépôt Moodle.",
-      "ressources": [
-        {
-          "titre": "Trousse Camtasia — Créer des capsules d'apprentissage",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/creer-des-capsules-dapprentissage-trousse-camtasia",
-          "categorie": "uds",
-          "type": "autoformation",
-          "description": "Autoformation officielle SSF UdeS sur l'utilisation de Camtasia (capture d'écran, narration, montage). À privilégier comme point d'entrée pour les enseignant·es UdeS qui ont accès à la licence institutionnelle.",
-          "duree": "2-3 h"
-        },
-        {
-          "titre": "Intégrer la vidéo dans Moodle avec Panopto",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/activites-de-formation/activite/integrer-la-video-dans-moodle-panopto/1365/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Atelier SSF sur l'utilisation de Panopto, l'outil institutionnel de gestion vidéo intégré à Moodle UdeS. Couvre dépôt, tracking et statistiques d'écoute.",
-          "duree": "1 h 30"
-        },
-        {
-          "titre": "Capsule avec le tableau lumineux",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/activites-de-formation/activite/capsule-avec-le-tableau-lumineux/1609/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Le SSF met à disposition un studio avec tableau lumineux (lightboard) pour produire des capsules dynamiques sur fond noir. Production assistée disponible sur demande.",
-          "duree": "Selon créneau"
-        },
-        {
-          "titre": "Soutien technopédagogique — Enseigner à l'UdeS",
-          "url": "https://www.usherbrooke.ca/enseigner/alternatives-au-presentiel/soutien-technopedagogique/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Page d'entrée vers l'ensemble du soutien technopédagogique offert pour la formation à distance et hybride à l'UdeS.",
-          "duree": "—"
-        },
-        {
-          "titre": "Capsules narrées — Université Laval",
-          "url": "https://www.enseigner.ulaval.ca/ressources-pedagogiques/capsules-narrees",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Guide complet d'ULaval : pertinence pédagogique, structure, scénarisation et production. Une référence francophone reconnue, applicable à n'importe quel contexte.",
-          "duree": "30-45 min de lecture"
-        },
-        {
-          "titre": "7 conseils pour concevoir, produire et diffuser une vidéo pédagogique — UQAM",
-          "url": "https://enseigner.uqam.ca/outils/panopto/conseils-concevoir-produire-diffuser-video-pedagogique/",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Guide pratique de l'UQAM organisé en 7 principes opérationnels. Bonus : démo vidéo de 39 minutes intégrée.",
-          "duree": "1 h"
-        },
-        {
-          "titre": "Autoproduction vidéo — Service audiovisuel UQAM",
-          "url": "https://audiovisuel.uqam.ca/services-offerts/autoproduction-video/",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Guide d'autoproduction vidéo (matériel, méthodes, conseils techniques) transférable hors UQAM. Particulièrement utile pour les enseignant·es qui souhaitent produire à domicile.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Capsules vidéo pédagogiques : techniques et conseils — Pôle d'expertise interordres FAD (QC)",
-          "url": "https://www.campus-expertise.gouv.qc.ca/ressources/les-capsules-videos-pedagogiques-techniques-et-conseils-pour-un-meilleur-impact/",
-          "categorie": "qc_fad",
-          "type": "guide",
-          "description": "Synthèse québécoise de référence sur les capsules vidéo : trois phases (préparation, production, diffusion), recommandations de durée (10-30 min), bonnes pratiques d'engagement.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Réaliser des capsules vidéo pédagogiques — RÉCIT FGA",
-          "url": "https://fganumerique.ca/realiser-capsules-video-pedagogiques/",
-          "categorie": "qc_fad",
-          "type": "guide",
-          "description": "Guide pratique avec outils gratuits et exemples concrets, orienté production rapide et efficiente.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Théorie cognitive de l'apprentissage multimédia — EduTech Wiki",
-          "url": "https://edutechwiki.unige.ch/fr/Théorie_cognitive_de_l'apprentissage_multimédia",
-          "categorie": "theorie",
-          "type": "article",
-          "description": "Synthèse universitaire des 12 principes de Mayer (segmentation, multimodalité, contiguïté…). Fondement théorique pour scénariser efficacement une capsule.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Comprendre la théorie de l'apprentissage multimédia — TÉLUQ J'enseigne à distance",
-          "url": "https://jenseigneadistance.teluq.ca/mod/page/view.php?id=262",
-          "categorie": "theorie",
-          "type": "article",
-          "description": "Adaptation québécoise des principes de Mayer dans le contexte de l'enseignement à distance.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Médiatiser vos contenus — Direction Multimédia UdeS",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/mediatiser-vos-contenus",
-          "categorie": "uds",
-          "type": "autoformation",
-          "description": "Autoformation officielle SSF UdeS sur la médiatisation de contenus pédagogiques. Couvre la production de matériel numérique (vidéos, balados, images interactives) avec les outils institutionnels de la Direction Multimédia de l'UdeS.",
-          "duree": "2-4 h"
-        }
-      ]
+}
+
+function showSuccessToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'success-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ==========================================
+// NAVIGATION ENTRE VUES
+// ==========================================
+function openGame() {
+    document.getElementById('chatbotView').style.display = 'none';
+    document.getElementById('gameView').classList.add('active');
+    initGame();
+}
+
+function closeGame() {
+    gActive = false;
+    if (gTimer) { clearInterval(gTimer); gTimer = null; }
+    document.getElementById('gameView').classList.remove('active');
+    document.getElementById('chatbotView').style.display = '';
+    gCurrent = 0; gTime = 300; gHints = 0; gSkipping = false;
+    document.getElementById('gameContent').style.display = 'block';
+    document.getElementById('gameSuccess').style.display = 'none';
+    document.getElementById('gameTimer').textContent = '5:00';
+    document.getElementById('gameTimer').classList.remove('critical');
+}
+
+// ==========================================
+// CHATBOT
+// ==========================================
+let conversationState = { step:'welcome', context:null, intention:null, situation:null, profile:null };
+
+const referentiel = {
+    contextes: {
+        'classe_structure':{ nom:'Enseignement en classe structuré par le programme', description:'Activités où les contenus, déroulement et matériel sont déterminés par le programme' },
+        'classe_non_structure':{ nom:'Enseignement en classe non structuré par le programme', description:'Activités où vous devez identifier vous-même contenus, déroulement et matériel' },
+        'stage_clinique':{ nom:'Supervision et encadrement en stage clinique', description:"Actions d'encadrement et d'enseignement en milieu de pratique" },
+        'etudes_superieures':{ nom:'Encadrement aux études supérieures et à la recherche', description:"Accompagnement d'apprenants en projet de recherche" }
     },
-    {
-      "id": "powerpoint_narre",
-      "titre": "PowerPoint narré",
-      "icone": "🎙️",
-      "ecart_priorite": "+2,50 (2e rang ex æquo)",
-      "intro": "Activité de transition entre le PowerPoint classique et la capsule vidéo. Permet d'enrichir un diaporama existant avec narration, minutage et exportation MP4 pour Moodle. Demande peu d'investissement matériel.",
-      "ressources": [
-        {
-          "titre": "Produire une vidéo de type PPT narrée — Atelier SSF",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/activites-de-formation/activite/produire-une-video-de-type-ppt-narree-et-la-diffuser-dans-moodle/1364/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Atelier officiel SSF UdeS couvrant l'enregistrement de diaporama, narration, minutage et intégration dans Moodle. Point de départ recommandé pour les enseignant·es UdeS.",
-          "duree": "2 h"
-        },
-        {
-          "titre": "Enregistrer une présentation PowerPoint — Documentation ENA",
-          "url": "https://www.usherbrooke.ca/documentation-ena/co/Enregistrer_presentation_PowerPoint.html",
-          "categorie": "uds",
-          "type": "documentation",
-          "description": "Documentation officielle ENA UdeS : procédure pas-à-pas pour enregistrer narration, minutage et exporter en vidéo MP4.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Enregistrer une présentation PowerPoint avec Panopto — Wiki UdeS",
-          "url": "https://wiki.usherbrooke.ca/pages/viewpage.action?pageId=16583509",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Alternative avec Panopto, l'outil institutionnel de gestion vidéo de l'UdeS. Permet aussi le dépôt direct dans Moodle avec tracking.",
-          "duree": "15 min"
-        },
-        {
-          "titre": "Produire des capsules vidéo avec PowerPoint — Article Perspectives SSF",
-          "url": "https://perspectivesssf.espaceweb.usherbrooke.ca/2018/03/01/produire-des-capsules-video-de-formation-avec-powerpoint/",
-          "categorie": "uds",
-          "type": "article",
-          "description": "Article réflexif du SSF explorant les bonnes pratiques pédagogiques, structure narrative et conseils de production pour les capsules PowerPoint narrées.",
-          "duree": "15 min"
-        },
-        {
-          "titre": "Enregistrer un diaporama PowerPoint — EduTech Wiki UNIGE",
-          "url": "https://edutechwiki.unige.ch/fr/Enregistrer_un_diaporama_powerpoint",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Tutoriel pas-à-pas pour enregistrer narration et minutage dans PowerPoint, exporter en vidéo, et résoudre les problèmes courants. Référence francophone détaillée.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "PowerPoint — Enregistrer une narration et minutage (UNIGE)",
-          "url": "https://www.unige.ch/enseignement-a-distance/application/files/3216/7059/8428/PPT_1_Enregistrer_son_cours_avec_PowerPoint.pdf",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Guide PDF officiel UNIGE de 1 page : marche à suivre concise pour enregistrer son cours avec PowerPoint et exporter une vidéo.",
-          "duree": "15 min"
-        },
-        {
-          "titre": "Présentations accessibles avec PowerPoint — eCampusOntario",
-          "url": "https://accessibility.ecampusontario.ca/accessibility/templates-and-guidelines/microsoft-powerpoint/",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Lignes directrices d'accessibilité (texte alternatif, contraste, structure, sous-titres) à appliquer au PowerPoint avant et après narration. Aligné conception universelle apprentissage (CUA).",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Pratiques pédagogiques inclusives — Pédagogie U Québec",
-          "url": "https://pedagogie.uquebec.ca/le-tableau/les-pratiques-pedagogiques-inclusives-au-coeur-de-la-planification-dun-cours-en",
-          "categorie": "qc",
-          "type": "article",
-          "description": "Cadre du Réseau de l'Université du Québec sur l'accessibilité numérique en présentiel et à distance, incluant le PowerPoint.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Soutien technopédagogique — Enseigner à l'UdeS",
-          "url": "https://www.usherbrooke.ca/enseigner/alternatives-au-presentiel/soutien-technopedagogique/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Le SSF de l'UdeS offre un accompagnement individuel pour la production de PowerPoint narrés, incluant l'aide à l'exportation et au dépôt Moodle.",
-          "duree": "—"
-        },
-        {
-          "titre": "Concevoir des supports accessibles avec PowerPoint — Université d'Angers",
-          "url": "https://labua.univ-angers.fr/wp-content/uploads/2024/04/Concevoir-des-supports-accessibles-avec-PPT-web.pdf",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Guide PDF complet (45 pages) sur la création de PowerPoint accessibles : structure, navigation, alternative texte, vidéo et audio. Très bien illustré.",
-          "duree": "1 h"
-        },
-        {
-          "titre": "Importer un fichier PowerPoint dans Moodle",
-          "url": "https://docs.moodle.org/19/fr/Importer_un_fichier_PowerPoint",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Documentation officielle Moodle (FR) sur l'intégration d'un PPT dans une activité Moodle.",
-          "duree": "10 min"
-        },
-        {
-          "titre": "Produire une vidéo de type PPT narrée — Micro-parcours SSF",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/micro-parcours/produire-une-video-de-type-ppt-narree",
-          "categorie": "uds",
-          "type": "micro_parcours",
-          "description": "Micro-parcours SSF UdeS pour produire rapidement une vidéo à partir d'un PowerPoint narré : enregistrement de la narration slide par slide, minutage, exportation MP4 et dépôt dans Moodle.",
-          "duree": "1-2 h"
-        },
-        {
-          "titre": "MEGA TUTO : Les BASES de POWERPOINT — Tutoriel complet 2024",
-          "url": "https://www.youtube.com/watch?v=XgrUBYc9ATE",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Tutoriel complet de 2h en français couvrant les bases et techniques avancées de PowerPoint, incluant narration et animation.",
-          "duree": "2 h"
-        },
-        {
-          "titre": "Comment Faire un BON PowerPoint en 2024 : Les Bases",
-          "url": "https://www.youtube.com/watch?v=MpJnWtpugjY",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Tutoriel rapide sur les principes de design et structure pour un PowerPoint efficace avant narration.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Alex Tutoriel PowerPoint — Chaîne YouTube",
-          "url": "https://www.youtube.com/channel/UCg17x9s6utMdU4IGXTLuHdQ/videos",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Chaîne YouTube complète avec tutoriels réguliers sur PowerPoint, du niveau débutant au avancé, en français.",
-          "duree": "Variable"
-        }
-      ]
+    misesSituation: {
+        'stagiaire_difficultes':{ titre:'Le stagiaire qui progresse peu', contexte:'stage_clinique', description:"Malgré vos rétroactions répétées, le stagiaire n'améliore pas ses performances.", competence:'Fonction 2 - Accompagner le stagiaire (Référentiel FMSS)', actionsRecommandees:["Je repère les indices de défis de progression et élabore des hypothèses (Référentiel FMSS)","J'analyse avec le stagiaire ses écarts de performance (Référentiel FMSS)","Je m'assure qu'un plan d'intervention réaliste soit élaboré (Référentiel FMSS)","Je fais appel aux ressources du programme si nécessaire (Référentiel FMSS)"], conseil:"Adoptez une approche diagnostique — identifiez d'abord les obstacles avant de proposer des solutions." },
+        'evaluation_formative_stage':{ titre:'Donner une rétroaction efficace', contexte:'stage_clinique', description:'Vous devez donner une rétroaction à votre stagiaire mais craignez sa réaction.', competence:'Évaluer (E) - Référentiel FMSS', actionsRecommandees:["Je décris de façon spécifique ce que le stagiaire maîtrise et les améliorations à faire","Je fais preuve d'écoute et d'empathie lors de la rétroaction","Je nomme clairement les comportements problématiques et leurs impacts","Je définis avec le stagiaire son plan d'apprentissage avec actions concrètes"], conseil:"Une rétroaction constructive est basée sur des observations concrètes et offre un plan d'action clair." },
+        'conflit_stagiaire':{ titre:'Gérer un conflit avec un stagiaire', contexte:'stage_clinique', description:"Un stagiaire conteste vos méthodes d'enseignement.", competence:'Intervenir (I) - Référentiel FMSS', actionsRecommandees:["J'accueille les préoccupations avec ouverture","Je clarifie mes attentes et les objectifs du stage","Je documente les échanges de manière factuelle","Je fais appel à la coordination si le conflit persiste"], conseil:'Les conflits peuvent révéler des malentendus. Clarifier les rôles est essentiel.' },
+        'engagement_faible':{ titre:"Améliorer l'engagement étudiant en classe", contexte:'classe_structure', description:'Vous donnez un cours structuré mais les étudiants semblent peu engagés.', competence:'Intervenir (I) et Réfléchir (R) - Référentiel FMSS', actionsRecommandees:["Je stimule la réactivation des connaissances antérieures","J'utilise plus d'une façon pour stimuler les échanges","J'enrichis mes interventions par des exemples et illustrations","Je considère les évaluations étudiantes pour identifier mes points à améliorer"], conseil:"Même dans un cours structuré, vous avez le contrôle de vos stratégies d'animation." },
+        'prof_magistral_app':{ titre:'Respecter la méthode APP/APÉ', contexte:'classe_structure', description:"En APP, vous prenez d'emblée la parole et donnez votre explication magistrale.", competence:'Intervenir (I) - Référentiel FMSS', actionsRecommandees:["Je retourne les questions au groupe avant d'intervenir","Je respecte le rôle de l'animateur étudiant","Je stimule la co-construction des connaissances","Je m'assure de la participation de tous"], conseil:"En APP/APÉ, le rôle du professeur est de faciliter la discussion, pas de donner un cours magistral." },
+        'etudiant_monopolise':{ titre:'Un étudiant monopolise la discussion', contexte:'classe_structure', description:'En APP/APÉ, un étudiant mobilise toute la discussion.', competence:'Intervenir (I) - Référentiel FMSS', actionsRecommandees:["Je sollicite activement les étudiants silencieux","Je remercie l'étudiant volubile et redirige vers les autres","J'instaure une règle de participation équitable","Je demande l'avis d'étudiants qui n'ont pas encore parlé"], conseil:"L'enseignant compétent favorise une participation équitable." },
+        'gestion_temps_app':{ titre:'Gestion du temps difficile en APP/APÉ', contexte:'classe_structure', description:"Les ateliers APP/APÉ s'étirent car il y a beaucoup de questions.", competence:'Planifier (P) et Intervenir (I) - Référentiel FMSS', actionsRecommandees:["Je planifie en respectant le déroulement prévu","J'identifie des espaces de réajustement du temps","Je définis les éléments essentiels vs bonus","Je rappelle au groupe les objectifs et le temps restant"], conseil:"En APP/APÉ, une gestion du temps rigoureuse est essentielle." },
+        'premier_cours':{ titre:'Concevoir un premier cours de A à Z', contexte:'classe_non_structure', description:"On vous demande de créer et donner un cours que vous n'avez jamais enseigné.", competence:'Planifier (P) - Référentiel FMSS', actionsRecommandees:["Je consulte le descriptif officiel et situe l'activité dans le parcours","Je définis les limites des contenus et éléments-clés","Je choisis des méthodes appropriées aux objectifs","J'écris un plan d'animation avec durée, notes, exemples"], conseil:"Commencez par l'essentiel — objectifs clairs, structure solide, exemples pertinents." },
+        'choix_methodes':{ titre:'Choisir les bonnes méthodes pédagogiques', contexte:'classe_non_structure', description:'Vous hésitez entre plusieurs approches pour enseigner votre contenu.', competence:'Planifier (P) et Intervenir (I) - Référentiel FMSS', actionsRecommandees:["J'aligne mes méthodes sur les objectifs visés","Je considère la taille du groupe et le niveau des apprenants","Je varie les méthodes pour maintenir l'engagement","Je prévois des méthodes interactives pour les concepts complexes"], conseil:"Il n'y a pas de 'meilleure' méthode universelle. L'efficacité dépend du contexte." },
+        'evaluer_apprentissages':{ titre:'Concevoir une évaluation sommative', contexte:'classe_non_structure', description:"Vous devez créer l'examen final de votre cours.", competence:'Évaluer (E) - Référentiel FMSS', actionsRecommandees:["Je m'assure que les questions évaluent les objectifs du cours","Je varie les types de questions","Je détermine des critères d'évaluation clairs","Je prévois une grille de correction détaillée"], conseil:"Une bonne évaluation mesure ce qui a été enseigné." },
+        'preadmission':{ titre:'Rencontre pré-admission', contexte:'etudes_superieures', description:'Vous devez rencontrer un candidat potentiel aux études supérieures.', competence:'Pré-admission - Référentiel FMSS', actionsRecommandees:["Je liste les caractéristiques de l'apprenant idéal","J'analyse le dossier académique et CV","Je prépare des questions pour préciser forces et limites","Je discute des modes d'encadrement possibles"], conseil:"Une bonne rencontre pré-admission prévient les incompatibilités." },
+        'directeur_absent':{ titre:"Gérer l'indisponibilité du directeur", contexte:'etudes_superieures', description:"Votre étudiant se plaint que vous n'êtes pas assez disponible.", competence:'Suivi - Référentiel FMSS', actionsRecommandees:["Je clarifie mes disponibilités et modes de communication","Je planifie des rencontres régulières à l'agenda","Je fournis des rétroactions écrites détaillées","Je définis ce que l'étudiant peut faire de façon autonome"], conseil:"La clarté des attentes mutuelles prévient frustrations et malentendus." },
+        'finalisation_these':{ titre:'Accompagner la finalisation de la thèse', contexte:'etudes_superieures', description:'Votre étudiant peine à terminer sa rédaction.', competence:'Suivi et Évaluer - Référentiel FMSS', actionsRecommandees:["Je décompose la rédaction en objectifs hebdomadaires","Je fixe des échéances intermédiaires avec remise de sections","Je fournis des rétroactions rapides et constructives","J'identifie avec l'étudiant les obstacles : perfectionnisme, anxiété"], conseil:"Un découpage en petites étapes aide à avancer." }
     },
-    {
-      "id": "h5p",
-      "titre": "Activités H5P interactives",
-      "icone": "🧩",
-      "ecart_priorite": "+2,50 (2e rang ex æquo)",
-      "intro": "Permet d'enrichir Moodle avec des activités interactives sans coder : vidéos interactives, jeux de mémoire, glissé-déposé, branching scenarios, présentations interactives. La Coordonnatrice GDL101 s'auto-désigne championne.",
-      "ressources": [
-        {
-          "titre": "H5P — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/display/MOODLE/H5P",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Page de référence du Wiki Moodle UdeS sur H5P : présentation, accès, lien vers les fiches détaillées par type d'activité. C'est le point d'entrée institutionnel UdeS.",
-          "duree": "10 min"
-        },
-        {
-          "titre": "Insérer une activité H5P — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/pages/viewpage.action?pageId=26740166",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Marche à suivre pas-à-pas pour insérer une activité H5P dans un cours Moodle UdeS via la banque de contenu.",
-          "duree": "15 min"
-        },
-        {
-          "titre": "Réutiliser une activité H5P — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/pages/viewpage.action?pageId=35162558",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Comment dupliquer ou exporter/importer une activité H5P entre deux cours UdeS — utile pour mutualiser le travail entre GDL 101, 201 et 301.",
-          "duree": "10 min"
-        },
-        {
-          "titre": "Contenus interactifs H5P — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/display/MOODLE/Contenus+interactifs+H5P",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Catalogue des types H5P avec exemples : exercices à trous, cartes mémoire, jeux de questions, etc. Pour identifier le bon outil selon l'intention pédagogique.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "H5P — Documentation Moodle (FR)",
-          "url": "https://docs.moodle.org/4x/fr/H5P",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Documentation officielle Moodle 4.x en français sur H5P. Référence technique pour comprendre les paramètres et la configuration.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Contenu interactif H5P — Documentation Moodle",
-          "url": "https://docs.moodle.org/4x/fr/Contenu_interactif_H5P",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Documentation officielle plus pratique sur la création et l'intégration de contenus interactifs H5P.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "H5P — Centre d'aide StudiUM UdeM",
-          "url": "https://soutien-studium.refined.site/space/BDCP/1405091890",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Guide UdeM (StudiUM = leur Moodle) sur H5P : intégration, méthodes de notation, bonnes pratiques. Très bien structuré.",
-          "duree": "45 min"
-        },
-        {
-          "titre": "H5P sur StudiUM — Wiki UdeM Confluence",
-          "url": "https://wiki.umontreal.ca/pages/viewpage.action?pageId=189568815",
-          "categorie": "qc",
-          "type": "wiki",
-          "description": "Documentation technique UdeM avec captures d'écran de l'interface étudiante et enseignante.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Activités H5P — Fiches réflexes Moodle 4 (Forge éducation FR)",
-          "url": "https://documentation-moodle.forge.apps.education.fr/docs/Tutoriels/8%EF%B8%8F%E2%83%A3%20Les%20activit%C3%A9s%20H5P/H5P%20-%20Les%20activites%20H5P/",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Fiches synthétiques (1-2 p.) par type d'activité H5P. Idéal pour avoir un mémo rapide.",
-          "duree": "10 min par fiche"
-        },
-        {
-          "titre": "H5P contenu interactif — Université de Strasbourg",
-          "url": "https://documentation.unistra.fr/DNUM/Pedagogie/Moodle_Guide_enseignant/co/_H5P.html",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Guide enseignant Unistra avec liste exhaustive des 30+ types H5P et leurs cas d'usage.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Bibliothèque officielle H5P (h5p.org)",
-          "url": "https://h5p.org/content-types-and-applications",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Site officiel H5P : catalogue des types de contenus avec démos interactives. À explorer pour s'inspirer (interface en anglais mais concepts universels).",
-          "duree": "30 min"
-        }
-      ]
-    },
-    {
-      "id": "podcast",
-      "titre": "Podcast pédagogique",
-      "icone": "🎧",
-      "ecart_priorite": "+2,17 (4e rang)",
-      "intro": "Format audio bref (5-15 min) écoutable en mobilité. Particulièrement pertinent pour la formation continue en santé, où les apprenants sont souvent en pratique clinique. Production simple : enregistrement, montage léger, hébergement.",
-      "ressources": [
-        {
-          "titre": "Studio Balados du SSF — Service professionnel",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/production-de-materiel-pedagogique/studio-balados",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Service professionnel du SSF offrant un studio de podcast équipé avec techniciennes/iens pour productions multi-voix (jusqu'à 3 personnes). Assistés pour post-production.",
-          "duree": "Sur demande"
-        },
-        {
-          "titre": "Soumettre un projet balado — Formulaire SSF",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/production-de-materiel-pedagogique/studio-balados/soumettre-un-projet-balado",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Formulaire pour soumettre un projet de podcast pédagogique et obtenir du soutien du SSF (accompagnement, expertise multimédia).",
-          "duree": "—"
-        },
-        {
-          "titre": "La baladodiffusion dans tous ses états — Article Perspectives SSF",
-          "url": "https://perspectivesssf.espaceweb.usherbrooke.ca/2020/12/01/la-baladodiffusion-dans-tous-ses-etats/",
-          "categorie": "uds",
-          "type": "article",
-          "description": "Article du SSF explorant les usages pédagogiques du podcast, formats, scénarios et bonnes pratiques pour la formation en santé.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Salles de montage audio et vidéo — Infrastructure SSF",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/production-de-materiel-pedagogique/salles-de-montage-audio-et-video",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Salles d'auto-montage et cabines d'enregistrement soundproof accessibles aux enseignant·es pour production autonome de podcasts.",
-          "duree": "—"
-        },
-        {
-          "titre": "Le podcast audio comme outil d'enseignement — Guide UNIL (PDF)",
-          "url": "https://sepia2.unil.ch/eet/wp-content/uploads/Podcast-guide-de-production.pdf",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Guide complet (35 pages) de production de podcasts pédagogiques produit par l'Université de Lausanne. Couvre conception, enregistrement, montage et diffusion. Référence francophone majeure.",
-          "duree": "1 h"
-        },
-        {
-          "titre": "Créer un podcast — CEMU Université de Caen",
-          "url": "https://pedagogie.unicaen.fr/service/podcast/",
-          "categorie": "fr",
-          "type": "service",
-          "description": "Service de l'Université de Caen avec processus complet et conseils opérationnels (scénarisation, habillage sonore, jingles).",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Pratiques pédagogiques exploitant le podcast audio — UCLouvain Learning Lab",
-          "url": "https://www.louvainlearninglab.blog/des-pratiques-pedagogiques-exploitant-le-podcast-audio/",
-          "categorie": "fr",
-          "type": "article",
-          "description": "Billet inspirant du Louvain Learning Lab avec exemples concrets de pratiques. Rafraîchissant pour défricher le potentiel du format.",
-          "duree": "15 min"
-        },
-        {
-          "titre": "Pédagogie Médicale Podcast — SIFEM",
-          "url": "https://www.sifem.net/fr/le-podcast",
-          "categorie": "qc",
-          "type": "podcast_exemple",
-          "description": "Podcast de la Société Internationale Francophone d'Éducation Médicale (SIFEM). Modèle pour comprendre comment fonctionne un podcast dédié à la pédagogie en santé.",
-          "duree": "Variable (30 min/épisode)"
-        },
-        {
-          "titre": "CAME HPE Podcast — Association canadienne pour l'éducation médicale",
-          "url": "https://camehpepod.podbean.com/",
-          "categorie": "qc",
-          "type": "podcast_exemple",
-          "description": "Podcast canadien sur l'éducation dans les professions de la santé (en français/anglais). Modèle de production professionnelle et de structure d'épisodes.",
-          "duree": "Variable"
-        },
-        {
-          "titre": "Réaliser un podcast rapidement — Académie de Besançon",
-          "url": "https://documentation.ac-besancon.fr/realiser-un-podcast-rapidement-quels-outils/",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Comparatif d'outils gratuits et payants (Audacity, Anchor, Auphonic) pour produire vite. Pratique pour démarrer.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Podcast des Conférenciers — UFR3S Université de Lille",
-          "url": "https://ufr3s.univ-lille.fr/formation-initiale/transformation-pedagogique/podcast-conferenciers",
-          "categorie": "fr",
-          "type": "podcast_exemple",
-          "description": "Initiative de la faculté de santé de Lille : podcasts produits par des étudiant·es et enseignant·es pour soutenir la révision. Modèle inspirant pour la FMSS.",
-          "duree": "—"
-        },
-        {
-          "titre": "Webinaire : Le podcast pédagogique en formation",
-          "url": "https://m.youtube.com/watch?v=Ljq1SiEs76Q",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Webinaire francophone explorant les principes de production de podcasts pédagogiques, structuration d'épisodes et engagement auditoire.",
-          "duree": "1 h"
-        },
-        {
-          "titre": "Comment Créer un Podcast Vidéo de A à Z : Tutoriel",
-          "url": "https://www.youtube.com/watch?v=G5CjTpuxLTg",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Tutoriel complet couvrant outils, enregistrement, montage et distribution d'un podcast vidéo en français.",
-          "duree": "45 min"
-        },
-        {
-          "titre": "À Podcasts — Chaîne YouTube production",
-          "url": "https://www.youtube.com/c/%C3%80Podcasts",
-          "categorie": "youtube",
-          "type": "video",
-          "description": "Chaîne YouTube avec contenus et tutoriels sur la production de podcasts en classe, animation et post-production.",
-          "duree": "Variable"
-        },
-        {
-          "titre": "NotebookLM : Créer des podcasts pédagogiques automatisés",
-          "url": "https://www.master-robot.be/2025/05/02/creer-des-podcasts-pedagogiques-avec-notebooklm-une-nouvelle-ressource-pour-les-eleves/",
-          "categorie": "youtube",
-          "type": "article",
-          "description": "Guide sur NotebookLM pour générer des podcasts pédagogiques automatiquement à partir de documents (PDF, texte, Google Docs).",
-          "duree": "20 min"
-        }
-      ]
-    },
-    {
-      "id": "test_examen_moodle",
-      "titre": "Test / examen en ligne Moodle",
-      "icone": "📝",
-      "ecart_priorite": "+2,00 (5e rang)",
-      "intro": "Couvre quiz formatifs, examens sommatifs, banques de questions et paramètres de sécurité (Safe Exam Browser). La Coordonnatrice GDL101 s'auto-désigne championne — formation approfondie prévue.",
-      "ressources": [
-        {
-          "titre": "Paramètres d'un test — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/pages/viewpage.action?pageId=58524080",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Documentation institutionnelle UdeS sur la configuration d'un test Moodle : minutage, tentatives, mélange, pénalités, mode adaptatif.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Safe Exam Browser — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/display/MOODLE/8.+Safe+Exam+Browser",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Guide officiel UdeS pour configurer Safe Exam Browser sur un examen Moodle. Indispensable pour les examens sommatifs sécurisés.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Aide pour l'enseignant — Wiki Moodle UdeS",
-          "url": "https://wiki.usherbrooke.ca/display/MOODLE/Aide+pour+l'enseignant",
-          "categorie": "uds",
-          "type": "wiki",
-          "description": "Page d'index du Wiki Moodle UdeS : tous les guides classés par fonction. Le bookmark à mettre en favori.",
-          "duree": "—"
-        },
-        {
-          "titre": "Les outils d'évaluation de Moodle — SSF UdeS",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/activites-de-formation/activite/les-outils-devaluation-de-moodle/1367/",
-          "categorie": "uds",
-          "type": "service",
-          "description": "Atelier formel SSF couvrant Carnet de notes, devoir et test. Inscriptions ouvertes plusieurs fois par session.",
-          "duree": "2 h"
-        },
-        {
-          "titre": "Modalités d'évaluation à distance — Enseigner à l'UdeS",
-          "url": "https://www.usherbrooke.ca/enseigner/alternatives-au-presentiel/modalites-devaluation-a-distance/",
-          "categorie": "uds",
-          "type": "guide",
-          "description": "Cadre institutionnel UdeS sur les modalités d'évaluation à distance : règles, encadrement, considérations pédagogiques. À consulter avant tout examen sommatif.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Modalités d'évaluation — SSF UdeS",
-          "url": "https://www.usherbrooke.ca/ssf/enseignement/evaluation-des-apprentissages/modalites-evaluation",
-          "categorie": "uds",
-          "type": "guide",
-          "description": "Page complémentaire couvrant les modalités d'évaluation au sens large (formative, sommative, par les pairs, etc.).",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Banque de questions — Documentation Moodle (FR)",
-          "url": "https://docs.moodle.org/3x/fr/Banque_de_questions",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Documentation officielle sur l'architecture de la banque de questions : catégories, métadonnées, importation/exportation. Indispensable pour les champion·ne·s.",
-          "duree": "45 min"
-        },
-        {
-          "titre": "Question à choix multiples — Moodle FR",
-          "url": "https://docs.moodle.org/4x/fr/Question_à_choix_multiples",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Type de question le plus fréquent : QCM à réponse simple ou multiple, avec rétroaction conditionnelle.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Question Cloze à réponses intégrées — Moodle FR",
-          "url": "https://docs.moodle.org/4x/fr/Question_Cloze_à_réponses_intégrées",
-          "categorie": "moodle",
-          "type": "documentation",
-          "description": "Format avancé permettant d'imbriquer plusieurs sous-questions dans un même paragraphe. Utile pour les vignettes cliniques en santé.",
-          "duree": "30 min"
-        },
-        {
-          "titre": "Test — Centre d'aide StudiUM UdeM",
-          "url": "https://soutien-studium.refined.site/space/BDCP/1658421249/Test",
-          "categorie": "qc",
-          "type": "guide",
-          "description": "Guide UdeM (StudiUM) sur l'activité Test : configuration, types de questions, paramètres avancés. Très bien illustré.",
-          "duree": "1 h"
-        },
-        {
-          "titre": "Banque de questions Moodle — Living Lab du Cnam",
-          "url": "https://living-lab.cnam.fr/la-banque-de-questions-de-moodle-un-outil-pour-assurer-une-evaluation-en-ligne/",
-          "categorie": "fr",
-          "type": "article",
-          "description": "Article de réflexion du Cnam (FR) sur la valeur pédagogique de la banque de questions structurée et les bonnes pratiques de catégorisation.",
-          "duree": "20 min"
-        },
-        {
-          "titre": "Test à visée sommative — Service Universitaire Pédagogie UBS",
-          "url": "https://sup-ubs.fr/documentation/lactivite-test-de-moodle-pour-creer-des-questionnaires-a-visee-sommative/",
-          "categorie": "fr",
-          "type": "guide",
-          "description": "Guide centré sur l'usage sommatif du test Moodle (sécurisation, accommodements, conditions d'accès). Pertinent pour la fiche A4.",
-          "duree": "30 min"
-        }
-      ]
+    competencesPIER: {
+        'P':{ nom:'Planifier', description:"Préparer les situations d'enseignement, d'apprentissage et d'évaluation", icone:'📋' },
+        'I':{ nom:'Intervenir', description:"Agir dans le cadre d'activités d'enseignement-apprentissage", icone:'🎯' },
+        'E':{ nom:'Évaluer', description:'Évaluer la performance des apprenants', icone:'📊' },
+        'R':{ nom:'Réfléchir', description:"Réfléchir sur son enseignement et s'engager dans le développement pédagogique", icone:'🔄' }
     }
-  ],
-  "transversal": {
-    "titre": "Ressources transversales",
-    "icone": "🧭",
-    "intro": "Ressources qui couvrent plusieurs activités à la fois ou qui posent les bases méthodologiques.",
-    "ressources": [
-      {
-        "titre": "CPSS — Centre de pédagogie des sciences de la santé (FMSS UdeS)",
-        "url": "https://www.usherbrooke.ca/cpss/fr/",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Vitrine publique du CPSS : mission, équipe, programmes de formation professorale, consultation pédagogique. Point d'entrée principal.",
-        "duree": "—"
-      },
-      {
-        "titre": "Boîte à outils technopédagogiques (B@O) — CPSS",
-        "url": "https://www.usherbrooke.ca/cpss/fr/accueil/babillard/babillard-details/article/29209/",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Catalogue de ressources technopédagogiques (Moodle, WebEx, Panopto, etc.) développé par et pour les enseignant·es FMSS. Accessible via l'intranet FMSS.",
-        "duree": "—"
-      },
-      {
-        "titre": "Formation professorale — CPSS",
-        "url": "https://www.usherbrooke.ca/medecine/faculte/centre-pedagogie-sciences-sante/developpement/formation-professorale",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Programmation de formations offertes aux enseignant·es FMSS : ateliers, parcours certificatifs, accompagnement individuel.",
-        "duree": "—"
-      },
-      {
-        "titre": "Consultation pédagogique — CPSS",
-        "url": "https://www.usherbrooke.ca/cpss/fr/consultation-pedagogique/",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Demande d'accompagnement individuel par un·e CP du CPSS. Démarche à privilégier pour des questions spécifiques au programme GDL.",
-        "duree": "—"
-      },
-      {
-        "titre": "Moodle UdeS — Service de soutien à la formation",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/plateformes-et-outils-technopedagogiques/moodle",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Page d'accueil officielle Moodle UdeS au SSF : ateliers, autoformations, soutien.",
-        "duree": "—"
-      },
-      {
-        "titre": "J'intègre Moodle dans mon enseignement — Autoformation SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/integrer-moodle-dans-mon-enseignement",
-        "categorie": "uds",
-        "type": "autoformation",
-        "description": "Autoformation officielle SSF de prise en main rapide de Moodle. Idéale pour les profils débutant et intermédiaire identifiés dans le rapport.",
-        "duree": "3-4 h"
-      },
-      {
-        "titre": "Plateformes et outils technopédagogiques — SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/plateformes-et-outils-technopedagogiques",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Catalogue institutionnel des outils numériques disponibles à l'UdeS : Moodle, Panopto, Camtasia, Teams, etc.",
-        "duree": "—"
-      },
-      {
-        "titre": "Formation à distance (FAD) — SSF UdeS",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/formation-a-distance-fad",
-        "categorie": "uds",
-        "type": "service",
-        "description": "Section dédiée à la FAD : conception de cours, accompagnement, ressources spécifiques.",
-        "duree": "—"
-      },
-      {
-        "titre": "Centre de pédagogie universitaire (CPU) — UdeM",
-        "url": "https://cpu.umontreal.ca/",
-        "categorie": "qc",
-        "type": "service",
-        "description": "Équivalent UdeM du CPSS. Programmation de formations très riche, ouvertes parfois aux externes. Une référence pour benchmarker.",
-        "duree": "—"
-      },
-      {
-        "titre": "Bonnes pratiques d'enseignement — Université Laval",
-        "url": "https://www.enseigner.ulaval.ca/pedagogie/bonnes-pratiques-denseignement",
-        "categorie": "qc",
-        "type": "guide",
-        "description": "Référence ULaval sur les bonnes pratiques pédagogiques à l'université, avec section spécifique au numérique.",
-        "duree": "1 h"
-      },
-      {
-        "titre": "Pôle d'expertise interordres en formation à distance (Québec)",
-        "url": "https://www.campus-expertise.gouv.qc.ca/",
-        "categorie": "qc_fad",
-        "type": "service",
-        "description": "Site gouvernemental québécois de référence en FAD : ressources, communauté de pratique, infographies, recommandations.",
-        "duree": "—"
-      },
-      {
-        "titre": "Service national du RÉCIT FAD",
-        "url": "https://ena.recitfad.com/",
-        "categorie": "qc_fad",
-        "type": "service",
-        "description": "Réseau québécois d'accompagnement pédagogique en FAD avec ressources gratuites pour enseignant·es.",
-        "duree": "—"
-      },
-      {
-        "titre": "Éductive (anciennement Profweb)",
-        "url": "https://eductive.ca/",
-        "categorie": "qc_fad",
-        "type": "article",
-        "description": "Plateforme québécoise de partage de pratiques pédagogiques et numériques. Articles d'enseignant·es du réseau collégial transférables.",
-        "duree": "—"
-      },
-      {
-        "titre": "12 principes de Mayer — Pairenne",
-        "url": "https://www.pairenne.com/blog/principes-de-mayer",
-        "categorie": "theorie",
-        "type": "article",
-        "description": "Synthèse pratique des 12 principes de l'apprentissage multimédia, applicables à PPT narré, capsule vidéo et podcast.",
-        "duree": "20 min"
-      },
-      {
-        "titre": "Enseigner à distance à l'Université de Sherbrooke — Autoformation SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/enseigner-a-distance-a-luniversite-de-sherbrooke",
-        "categorie": "uds",
-        "type": "autoformation",
-        "description": "Autoformation officielle SSF couvrant les fondements de l'enseignement à distance à l'UdeS : outils institutionnels, modalités FAD, conception de cours en ligne. Parcours complet disponible dans Moodle, suivable en entier ou par section.",
-        "duree": "3-5 h"
-      },
-      {
-        "titre": "Enseigner à distance avec Teams — Autoformation SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/enseigner-a-distance-avec-teams",
-        "categorie": "uds",
-        "type": "autoformation",
-        "description": "Autoformation SSF centrée sur l'utilisation de Microsoft Teams pour l'enseignement à distance : réunions, classes virtuelles, partage de contenu, interactions synchrones avec les étudiant·es.",
-        "duree": "2-3 h"
-      },
-      {
-        "titre": "Espaces d'apprentissage actif — Autoformation SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/autoformations/espaces-dapprentissage-actif",
-        "categorie": "uds",
-        "type": "autoformation",
-        "description": "Autoformation SSF sur la conception et l'animation d'espaces d'apprentissage actif (EAA) à l'UdeS. Explore comment tirer parti des salles modulables et des outils numériques pour favoriser l'engagement étudiant.",
-        "duree": "2-3 h"
-      },
-      {
-        "titre": "Genially — Micro-parcours SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/micro-parcours/genially",
-        "categorie": "uds",
-        "type": "micro_parcours",
-        "description": "Micro-parcours SSF sur Genially, outil de création de présentations interactives, infographies animées et escape games pédagogiques. Alternative créative à PowerPoint, sans compétences techniques requises.",
-        "duree": "1-2 h"
-      },
-      {
-        "titre": "Wooclap — Micro-parcours SSF",
-        "url": "https://www.usherbrooke.ca/ssf/enseignement/programmation/micro-parcours/wooclap",
-        "categorie": "uds",
-        "type": "micro_parcours",
-        "description": "Micro-parcours SSF sur Wooclap, outil de participation interactive en classe (sondages, quiz, nuages de mots, questions ouvertes). Favorise l'engagement et la rétroaction en temps réel, en présentiel comme à distance.",
-        "duree": "1-2 h"
-      }
-    ]
-  }
 };
 
-let currentTab = DATA.activites[0].id;
-let currentCat = "all";
-let currentSearch = "";
-
-const $main = document.getElementById("main-content");
-const $tabs = document.getElementById("tab-list");
-const $catChips = document.getElementById("cat-chips");
-const $search = document.getElementById("search");
-const $stats = document.getElementById("stats");
-
-const allTabs = [...DATA.activites, { id: "transversal", titre: DATA.transversal.titre, icone: DATA.transversal.icone, ecart_priorite: null }];
-allTabs.forEach((tab, idx) => {
-  const li = document.createElement("li");
-  const btn = document.createElement("button");
-  btn.setAttribute("role", "tab");
-  btn.setAttribute("aria-selected", idx === 0 ? "true" : "false");
-  btn.dataset.tab = tab.id;
-  btn.innerHTML = `<span class="tab-icon" aria-hidden="true">${tab.icone}</span> ${tab.titre}` + (tab.ecart_priorite ? `<span class="tab-priorite" title="Écart intérêt-maîtrise">${tab.ecart_priorite.split(" ")[0]}</span>` : "");
-  if (idx === 0) btn.classList.add("active");
-  btn.addEventListener("click", () => {
-    currentTab = tab.id;
-    document.querySelectorAll("nav.tabs button").forEach(b => {
-      b.classList.toggle("active", b === btn);
-      b.setAttribute("aria-selected", b === btn ? "true" : "false");
-    });
-    render();
-  });
-  li.appendChild(btn);
-  $tabs.appendChild(li);
-});
-
-DATA.categories_ressources.forEach(cat => {
-  const btn = document.createElement("button");
-  btn.className = "chip filter-cat";
-  btn.dataset.cat = cat.id;
-  btn.textContent = cat.label;
-  btn.style.borderLeft = `4px solid ${cat.couleur}`;
-  btn.setAttribute("aria-pressed", "false");
-  btn.title = cat.description;
-  btn.addEventListener("click", () => {
-    currentCat = cat.id;
-    document.querySelectorAll(".filter-cat").forEach(b => {
-      b.classList.toggle("active", b === btn);
-      b.setAttribute("aria-pressed", b === btn ? "true" : "false");
-    });
-    render();
-  });
-  $catChips.appendChild(btn);
-});
-document.querySelector(".filter-cat[data-cat='all']").addEventListener("click", function() {
-  currentCat = "all";
-  document.querySelectorAll(".filter-cat").forEach(b => {
-    b.classList.toggle("active", b === this);
-    b.setAttribute("aria-pressed", b === this ? "true" : "false");
-  });
-  render();
-});
-
-$search.addEventListener("input", e => { currentSearch = e.target.value.toLowerCase().trim(); render(); });
-
-function getCurrentResources() {
-  if (currentTab === "transversal") return { activity: DATA.transversal, ressources: DATA.transversal.ressources };
-  const a = DATA.activites.find(x => x.id === currentTab);
-  return { activity: a, ressources: a.ressources };
+function addMessage(content,isBot=true){
+    const c=document.getElementById('chatMessages'),d=document.createElement('div');
+    d.className=`message ${isBot?'bot':'user'}`;
+    d.innerHTML=isBot?`<div class="bot-avatar">CP</div><div class="message-content">${content}</div>`:`<div class="message-content">${content}</div>`;
+    c.appendChild(d); c.scrollTop=c.scrollHeight;
 }
-function getCategoryById(id) { return DATA.categories_ressources.find(c => c.id === id); }
-function getTypeLabel(id) { const t = DATA.types_ressources.find(x => x.id === id); return t ? t.label : id; }
-
-function render() {
-  const { activity, ressources } = getCurrentResources();
-  let filtered = ressources;
-  if (currentCat !== "all") filtered = filtered.filter(r => r.categorie === currentCat);
-  if (currentSearch) filtered = filtered.filter(r => r.titre.toLowerCase().includes(currentSearch) || r.description.toLowerCase().includes(currentSearch) || getTypeLabel(r.type).toLowerCase().includes(currentSearch));
-  $stats.textContent = `${filtered.length} ressource${filtered.length > 1 ? "s" : ""} affichée${filtered.length > 1 ? "s" : ""}` + (filtered.length !== ressources.length ? ` sur ${ressources.length}` : "");
-  let html = `<section class="activity-section" aria-labelledby="activity-title"><div class="activity-header"><div class="icon" aria-hidden="true">${activity.icone}</div><div><h2 id="activity-title">${activity.titre}</h2>${activity.ecart_priorite ? `<span class="priorite">Priorité : écart ${activity.ecart_priorite}</span>` : ""}<p>${activity.intro}</p></div></div>`;
-  if (filtered.length === 0) {
-    html += `<div class="empty">Aucune ressource ne correspond à ces filtres.<br>Essayez d'ajuster votre recherche ou la catégorie sélectionnée.</div>`;
-  } else {
-    html += `<div class="grid">` + filtered.map(r => {
-      const cat = getCategoryById(r.categorie);
-      return `<article class="card"><div class="card-tags"><span class="card-tag cat" style="background: ${cat.couleur};">${cat.label}</span><span class="card-tag type">${getTypeLabel(r.type)}</span></div><h3>${escapeHTML(r.titre)}</h3><p class="desc">${escapeHTML(r.description)}</p><div class="footer"><span class="duree">${escapeHTML(r.duree)}</span><a class="open-link" href="${r.url}" target="_blank" rel="noopener noreferrer">Ouvrir</a></div></article>`;
-    }).join("") + `</div>`;
-  }
-  html += `</section>`;
-  $main.innerHTML = html;
+function showTyping(){const c=document.getElementById('chatMessages'),d=document.createElement('div');d.className='message bot';d.id='typing';d.innerHTML='<div class="bot-avatar">CP</div><div class="typing-indicator active"><span></span><span></span><span></span></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+function addChoiceButtons(choices){
+    const c=document.getElementById('chatMessages'),d=document.createElement('div');d.className='message bot';
+    let h='<div class="bot-avatar">CP</div><div class="message-content"><div class="buttons-container">';
+    choices.forEach(ch=>{h+=`<button class="choice-btn" onclick="handleChoice('${ch.value}')">${ch.label}</button>`;});
+    h+='</div></div>';d.innerHTML=h;c.appendChild(d);c.scrollTop=c.scrollHeight;
 }
-function escapeHTML(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
-render();
-
-// =========================================================
-// Chat Assistant
-// =========================================================
-const STORAGE_KEY = "trousse-gdl-key";
-const STORAGE_MODEL = "trousse-gdl-model";
-const MODELS = [
-  { id: "claude-haiku-4-5-20251001", label: "Claude Haiku 4.5 (rapide, économique)" },
-  { id: "claude-sonnet-4-6", label: "Claude Sonnet 4.6 (équilibré, recommandé)" },
-  { id: "claude-opus-4-6", label: "Claude Opus 4.6 (haute qualité)" },
-];
-const SUGGESTIONS = [
-  "Je veux faire une capsule vidéo de 5 min sur la pharmacologie de la douleur. Par où commencer ?",
-  "Comment créer un quiz formatif Moodle qui débloque la suite si on a 80 % ?",
-  "J'aimerais une activité H5P pour des vignettes cliniques en gestion de la douleur.",
-  "Quelle est la différence entre PowerPoint narré et capsule vidéo ?",
-];
-let conversation = [];
-let recommendedTitles = new Set();
-let isThinking = false;
-
-const $chatFab = document.getElementById("chat-fab");
-const $chatPanel = document.getElementById("chat-panel");
-const $chatClose = document.getElementById("chat-close");
-const $chatBody = document.getElementById("chat-body");
-const $modalOverlay = document.getElementById("modal-overlay");
-const $modalClose = document.getElementById("modal-close");
-const $modalBody = document.getElementById("modal-body");
-const $modalCancel = document.getElementById("modal-cancel");
-const $exportPdf = document.getElementById("export-pdf");
-const $exportDocx = document.getElementById("export-docx");
-
-// Attach event listeners safely with null checks
-if ($chatFab) $chatFab.addEventListener("click", openChat);
-if ($chatClose) $chatClose.addEventListener("click", closeChat);
-if ($modalClose) $modalClose.addEventListener("click", closeModal);
-if ($modalCancel) $modalCancel.addEventListener("click", closeModal);
-if ($exportPdf) $exportPdf.addEventListener("click", () => exportSynthesis("pdf"));
-if ($exportDocx) $exportDocx.addEventListener("click", () => exportSynthesis("docx"));
-if ($modalOverlay) $modalOverlay.addEventListener("click", e => { if (e.target === $modalOverlay) closeModal(); });
-
-function openChat() { $chatPanel.classList.add("open"); $chatPanel.setAttribute("aria-hidden", "false"); $chatFab.classList.add("hidden"); renderChatBody(); }
-function closeChat() { $chatPanel.classList.remove("open"); $chatPanel.setAttribute("aria-hidden", "true"); $chatFab.classList.remove("hidden"); }
-function openPrivacyModal() { document.getElementById("privacyModalOverlay").classList.add("active"); }
-function closePrivacyModal() { document.getElementById("privacyModalOverlay").classList.remove("active"); }
-document.getElementById("privacyModalOverlay").addEventListener("click", e => { if (e.target.id === "privacyModalOverlay") closePrivacyModal(); });
-function acceptConsent() { setConsent(); document.getElementById("consentModalOverlay").classList.remove("active"); }
-function rejectConsent() { alert("Vous devez accepter pour utiliser le chatbot."); }
-function clearAllData() {
-  if (confirm("Êtes-vous sûr de vouloir effacer votre conversation et vos données locales ?\n\nNote : Les données chez Anthropic ne peuvent pas être supprimées par l'Université.")) {
-    conversation = [];
-    recommendedTitles.clear();
-    sessionStorage.removeItem(STORAGE_MODEL);
-    renderConversationMessages();
-    updateRecommendedBar();
-    alert("✓ Vos données locales ont été supprimées.\n\nRappel : Vos données chez Anthropic restent selon leur politique de confidentialité.");
-  }
+window.handleChoice=function(value){
+    document.querySelectorAll('.choice-btn').forEach(b=>{b.disabled=true;b.style.opacity='0.5';});
+    const btn=Array.from(document.querySelectorAll('.choice-btn')).find(b=>b.onclick&&b.onclick.toString().includes(value));
+    addMessage(btn?btn.textContent:value,false);
+    setTimeout(()=>processUserChoice(value),800);
+};
+function processUserChoice(choice){
+    showTyping();
+    setTimeout(()=>{
+        hideTyping();
+        switch(conversationState.step){
+            case 'welcome':handleContextChoice(choice);break;
+            case 'intention':handleIntentionChoice(choice);break;
+            case 'situation':case 'situation_ameliorer':handleSituationChoice(choice);break;
+            case 'profile':handleProfileChoice(choice);break;
+            case 'defi_type':handleDefiChoice(choice);break;
+            case 'followup':handleFollowupChoice(choice);break;
+            case 'competence_choice':handleCompetenceChoice(choice);break;
+            case 'custom_followup':handleCustomFollowup(choice);break;
+        }
+    },1500);
 }
-document.getElementById("consent-checkbox").addEventListener("change", e => {
-  document.getElementById("acceptBtn").disabled = !e.target.checked;
-});
-function getModel() { return sessionStorage.getItem(STORAGE_MODEL) || MODELS[1].id; }
-function setModel(m) { sessionStorage.setItem(STORAGE_MODEL, m); }
-function hasConsent() { return sessionStorage.getItem("gdl_consent") === "true"; }
-function setConsent() { sessionStorage.setItem("gdl_consent", "true"); }
-function renderChatBody() {
-  if (!hasConsent()) {
-    document.getElementById("consentModalOverlay").classList.add("active");
-    return;
-  }
-  renderConversation();
+function handleContextChoice(context){
+    conversationState.context=context;conversationState.step='intention';
+    const ci=referentiel.contextes[context];
+    addMessage(`Très bien. Vous travaillez en contexte de <span class="highlight">${ci.nom}</span>.<br><br>${ci.description}<br><br><strong>Que souhaitez-vous accomplir aujourd'hui ?</strong>`);
+    addChoiceButtons([{label:"🎯 Améliorer une activité existante",value:'ameliorer'},{label:"🆕 Préparer une nouvelle activité",value:'preparer'},{label:"🔧 Résoudre un défi spécifique",value:'resoudre'}]);
 }
-
-function renderConversation() {
-  $chatBody.innerHTML = `
-    <div class="chat-conversation">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="recommended-bar" id="recommended-bar">
-        <span class="count" id="recommended-count">0 ressource recommandée</span>
-        <button id="open-synthesis">📋 Voir la fiche-synthèse</button>
-      </div>
-      <div class="chat-input-area">
-        <div class="chat-input-wrap">
-          <textarea id="chat-input" placeholder="Décrivez votre besoin pédagogique..." rows="1" aria-label="Message"></textarea>
-          <button class="chat-send" id="chat-send" aria-label="Envoyer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-controls">
-          <button id="clear-conv">Nouvelle conversation</button>
-          <button class="clear-data-btn" id="clear-all-data" title="Supprime votre conversation et vos données locales">🗑️ Effacer mes données</button>
-        </div>
-      </div>
-      <div class="privacy-footer">
-        <span class="privacy-footer-icon">🔒</span>
-        <span class="privacy-footer-text">
-          <strong>Confidentialité (Loi 25) :</strong> Le chatbot utilise Claude (Anthropic) via un serveur sécurisé. Vos questions sont traitées en conformité avec la Loi 25.
-          <span class="privacy-footer-link" onclick="openPrivacyModal()">En savoir plus</span>
-        </span>
-      </div>
-    </div>`;
-  renderConversationMessages();
-  const $input = document.getElementById("chat-input");
-  const $send = document.getElementById("chat-send");
-  $input.addEventListener("input", () => { $input.style.height = "auto"; $input.style.height = Math.min($input.scrollHeight, 120) + "px"; });
-  $input.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
-  $send.addEventListener("click", sendMessage);
-  document.getElementById("clear-conv").addEventListener("click", () => {
-    if (confirm("Effacer la conversation et les ressources recommandées ?")) { conversation = []; recommendedTitles.clear(); renderConversationMessages(); updateRecommendedBar(); }
-  });
-  document.getElementById("clear-all-data").addEventListener("click", clearAllData);
-  document.getElementById("open-synthesis").addEventListener("click", openModal);
-  updateRecommendedBar();
-}
-
-function renderConversationMessages() {
-  const $messages = document.getElementById("chat-messages");
-  if (!$messages) return;
-  if (conversation.length === 0) {
-    $messages.innerHTML = `
-      <div class="message assistant"><div class="message-role">Assistant</div><div class="message-content">Bonjour ! Je suis l'assistant pédagogique de la trousse Moodle GDL. Décrivez-moi votre besoin spécifique (un type d'activité à concevoir, une difficulté technique, un objectif pédagogique) et je vous proposerai les ressources les plus pertinentes parmi les 62 disponibles.</div></div>
-      <div class="chat-suggestions"><h4>Suggestions pour démarrer</h4>${SUGGESTIONS.map(s => `<button class="suggestion">${escapeHTML(s)}</button>`).join("")}</div>`;
-    document.querySelectorAll(".suggestion").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const $input = document.getElementById("chat-input");
-        $input.value = btn.textContent.trim(); $input.focus();
-        $input.style.height = "auto"; $input.style.height = Math.min($input.scrollHeight, 120) + "px";
-      });
-    });
-  } else {
-    $messages.innerHTML = conversation.map(m => `
-      <div class="message ${m.role}${m.error ? " error" : ""}">
-        <div class="message-role">${m.role === "user" ? "Vous" : "Assistant"}</div>
-        <div class="message-content">${formatMessage(m.content)}</div>
-      </div>`).join("");
-  }
-  $messages.scrollTop = $messages.scrollHeight;
-}
-
-function formatMessage(text) {
-  let safe = escapeHTML(text);
-  safe = safe.replace(/\[RESSOURCE\s*:\s*([^\]]+)\]/g, '<strong style="color: var(--uds-gold-dark);">📌 $1</strong>');
-  safe = safe.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-  return safe;
-}
-
-function getAllResources() {
-  const all = [];
-  DATA.activites.forEach(a => a.ressources.forEach(r => all.push({...r, activite: a.titre, activiteId: a.id})));
-  DATA.transversal.ressources.forEach(r => all.push({...r, activite: DATA.transversal.titre, activiteId: "transversal"}));
-  return all;
-}
-
-function buildSystemPrompt() {
-  const resources = getAllResources().map(r => ({ titre: r.titre, activite: r.activite, categorie: getCategoryById(r.categorie).label, type: getTypeLabel(r.type), description: r.description, duree: r.duree, url: r.url }));
-  return `Tu es l'assistant pédagogique du Centre de pédagogie des sciences de la santé (CPSS) de la Faculté de médecine et des sciences de la santé de l'Université de Sherbrooke.
-
-Tu accompagnes les enseignant·es du microprogramme Gestion de la douleur (GDL) dans leur transition vers Moodle.
-
-Tu as accès à une trousse curée de 62 ressources pédagogiques publiques portant sur 5 activités prioritaires : capsule vidéo pédagogique, PowerPoint narré, activités H5P interactives, podcast pédagogique, test/examen Moodle.
-
-Voici la liste complète des ressources :
-
-\`\`\`json
-${JSON.stringify(resources, null, 2)}
-\`\`\`
-
-Ton rôle quand un·e enseignant·e te pose une question :
-1. Comprendre son besoin (contexte, contraintes, objectif pédagogique).
-2. Pose une question de clarification (une seule, brève) si nécessaire.
-3. Recommander 2 à 5 ressources pertinentes parmi les 62 disponibles.
-4. Pour CHAQUE ressource recommandée, utilise EXACTEMENT ce format au début d'une ligne : [RESSOURCE: titre exact de la ressource]
-   Puis explique en 1-2 phrases pourquoi elle convient.
-5. Conclure par une démarche concrète (par où commencer, ordre d'utilisation).
-
-Utilise EXCLUSIVEMENT les titres EXACTS de la liste (copie-colle). Le système détecte ces marqueurs pour remplir la fiche-synthèse.
-
-Réponds en français québécois professionnel et chaleureux. 200-400 mots maximum par réponse.`;
-}
-
-async function sendMessage() {
-  const $input = document.getElementById("chat-input");
-  const text = $input.value.trim();
-  if (!text || isThinking) return;
-  conversation.push({ role: "user", content: text });
-  $input.value = ""; $input.style.height = "auto"; isThinking = true;
-  renderConversationMessages();
-  const $messages = document.getElementById("chat-messages");
-  const thinkingEl = document.createElement("div");
-  thinkingEl.className = "message thinking";
-  thinkingEl.innerHTML = `<div class="message-role">Assistant</div><div class="message-content">L'assistant réfléchit…</div>`;
-  $messages.appendChild(thinkingEl);
-  $messages.scrollTop = $messages.scrollHeight;
-  try {
-    const response = await fetch("/.netlify/functions/chat-api", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ model: getModel(), system: buildSystemPrompt(), messages: conversation.map(m => ({ role: m.role, content: m.content })) }),
-    });
-    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error || `Erreur ${response.status}`); }
-    const data = await response.json();
-    const assistantText = data.content?.[0]?.text || "(réponse vide)";
-    conversation.push({ role: "assistant", content: assistantText });
-    detectRecommendedResources(assistantText);
-  } catch (e) {
-    conversation.push({ role: "assistant", content: `❌ Erreur : ${e.message}\n\nVérifiez votre connexion internet.`, error: true });
-  } finally {
-    isThinking = false; renderConversationMessages(); updateRecommendedBar();
-  }
-}
-
-function detectRecommendedResources(text) {
-  const all = getAllResources();
-  const matches = text.matchAll(/\[RESSOURCE\s*:\s*([^\]]+?)\]/g);
-  for (const m of matches) {
-    const title = m[1].trim();
-    let res = all.find(r => r.titre === title);
-    if (!res) {
-      const tLow = title.toLowerCase();
-      res = all.find(r => r.titre.toLowerCase() === tLow) || all.find(r => r.titre.toLowerCase().includes(tLow) || tLow.includes(r.titre.toLowerCase().substring(0, 40)));
+function handleIntentionChoice(intention){
+    conversationState.intention=intention;
+    if(intention==='ameliorer'){
+        conversationState.step='situation_ameliorer';
+        const sits=getSituationsForContext(conversationState.context);
+        if(sits.length>0){
+            addMessage('Laquelle de ces situations correspond le mieux à la vôtre ?');
+            const choices=sits.map(s=>({label:s.titre,value:s.key}));
+            choices.push({label:"✍️ Décrire ma propre situation",value:'custom'});
+            addChoiceButtons(choices);
+        } else {
+            addMessage('Décrivez-moi brièvement la situation que vous souhaitez améliorer.');
+            document.getElementById('inputArea').classList.add('active');
+            conversationState.step='custom_situation';
+        }
+    } else if(intention==='preparer'){
+        conversationState.step='profile';
+        addMessage("Pour vous guider, j'ai besoin de situer <span class='highlight'>votre niveau d'expérience</span>.");
+        addChoiceButtons([{label:"🌱 Première fois",value:'debutant'},{label:"📚 Intermédiaire",value:'intermediaire'},{label:"⭐ Expérimenté",value:'experimente'}]);
+    } else {
+        conversationState.step='defi_type';
+        addMessage('<strong>De quel type de défi s\'agit-il ?</strong>');
+        addChoiceButtons([{label:"👥 Gestion du groupe/stagiaire",value:'gestion'},{label:"⏰ Gestion du temps",value:'temps'},{label:"📋 Planification",value:'planification'},{label:"📊 Évaluation/rétroaction",value:'evaluation'}]);
     }
-    if (res) recommendedTitles.add(res.titre);
-  }
+}
+function getSituationsForContext(context){const s=[];for(let k in referentiel.misesSituation){const sit=referentiel.misesSituation[k];if(sit.contexte===context)s.push({...sit,key:k});}return s;}
+function handleSituationChoice(choice){
+    if(choice==='custom'){addMessage("Je vous écoute. Décrivez votre situation en quelques phrases.");document.getElementById('inputArea').classList.add('active');conversationState.step='custom_situation';return;}
+    const situation=referentiel.misesSituation[choice];if(!situation){addMessage('Erreur.');return;}
+    conversationState.situation=choice;conversationState.step='actions';
+    addMessage(`<div class="situation-card"><h4>📌 ${situation.titre}</h4><p>${situation.description}</p></div>Compétence : <span class="competence-tag">${situation.competence}</span><br><br><strong>Actions-clés selon le Référentiel FMSS :</strong>`);
+    setTimeout(()=>showActionsCles(situation),1000);
+}
+function showActionsCles(situation){
+    situation.actionsRecommandees.forEach((a,i)=>{setTimeout(()=>{addMessage(`<div class="action-cle"><strong>Action ${i+1} :</strong> ${a}</div>`);},i*800);});
+    setTimeout(()=>{
+        addMessage(`<div style="background:#e8f5e9;padding:15px;border-radius:10px;margin-top:15px;">💡 <strong>Conseil :</strong><br>${situation.conseil}</div><br><strong>Comment souhaitez-vous poursuivre ?</strong>`);
+        addChoiceButtons([{label:"📚 Approfondir",value:'approfondir'},{label:"📄 Fiche synthèse",value:'synthese'},{label:"🔄 Autre situation",value:'autre'}]);
+        conversationState.step='followup';
+    },situation.actionsRecommandees.length*800+500);
+}
+function handleProfileChoice(choice){
+    conversationState.profile=choice;
+    if(choice==='experimente'){
+        addMessage('Quelle dimension souhaitez-vous approfondir ?');
+        addChoiceButtons([{label:"🎨 Innovation pédagogique",value:'innovation'},{label:"📊 Évaluation avancée",value:'E'},{label:"👥 Mentorat de collègues",value:'mentorat'},{label:"🔬 Scholarship of teaching",value:'R'}]);
+    } else {
+        addMessage('Par quelle compétence souhaitez-vous commencer ?');
+        addChoiceButtons([{label:"📋 Planifier",value:'P'},{label:"🎯 Intervenir",value:'I'},{label:"📊 Évaluer",value:'E'},{label:"🔄 Réfléchir",value:'R'}]);
+    }
+    conversationState.step='competence_choice';
+}
+function handleDefiChoice(choice){
+    const cfgs={'gestion':{comp:'Intervenir (I)',actions:["Je m'assure de la participation de tous","Je discute avec le groupe de l'efficacité des interactions","J'identifie avec l'apprenant des solutions","Je prévois des interventions additionnelles"]},'temps':{comp:'Planifier (P)',actions:["Je planifie pour respecter le déroulement prévu","J'identifie des espaces de réajustement du temps","Je prévois des explications variées","Je définis les limites des contenus"]},'planification':{comp:'Planifier (P)',actions:["Je consulte le descriptif officiel du cours","Je détermine les liens avec les connaissances antérieures","Je choisis des méthodes appropriées","J'écris un plan d'animation détaillé"]},'evaluation':{comp:'Évaluer (E)',actions:["Je fais une rétroaction précise ciblant points forts et à améliorer","Je fais le point par rapport aux critères d'évaluation","Je fais preuve d'écoute et d'empathie","Je définis avec l'apprenant un plan d'apprentissage concret"]}};
+    const cfg=cfgs[choice];
+    addMessage(`La compétence <span class="competence-tag">${cfg.comp}</span> est centrale.<br><br><strong>Actions-clés recommandées :</strong>`);
+    cfg.actions.forEach((a,i)=>{setTimeout(()=>{addMessage(`<div class="action-cle"><strong>Action ${i+1} :</strong> ${a}</div>`);},i*800);});
+    setTimeout(()=>{addMessage('<strong>Comment souhaitez-vous poursuivre ?</strong>');addChoiceButtons([{label:"📄 Fiche synthèse",value:'synthese'},{label:"🔄 Autre défi",value:'restart'}]);conversationState.step='followup';},cfg.actions.length*800+500);
+}
+function handleCompetenceChoice(choice){
+    if(choice==='innovation'||choice==='mentorat'){addMessage("Pour approfondir cette dimension, contactez le CPSS.<br>👤 Benoît Laforest — ✉️ benoit.laforest@usherbrooke.ca<br><br><button class='restart-btn' onclick='location.reload()'>🔄 Recommencer</button>");conversationState.step='followup';return;}
+    const comp=referentiel.competencesPIER[choice];if(!comp){addMessage('Erreur.');return;}
+    addMessage(`Compétence <span class="competence-tag">${comp.icone} ${comp.nom}</span><br><br>${comp.description}<br><br><strong>Actions-clés selon le référentiel FMSS :</strong>`);
+    const acts={'P':["Je définis les limites des contenus et éléments-clés","Je situe mon activité dans le parcours de l'apprenant","Je détermine les liens avec les connaissances antérieures","Je planifie mon temps pour respecter le déroulement prévu"],'I':["Je stimule la réactivation des connaissances antérieures","J'enrichis mes interventions par des exemples et illustrations","Je m'assure que les contenus clés sont couverts","Je m'assure de la participation de tous"],'E':["J'utilise des outils adéquats pour poser un jugement","Je fais une rétroaction précise ciblant points forts et à améliorer","Je recueille le point de vue de l'apprenant","Je définis avec l'apprenant un plan d'apprentissage concret"],'R':["J'identifie mes bons coups et ce qui a moins bien été","Je considère les évaluations par les apprenants","Je sélectionne des actions concrètes pour améliorer mon enseignement","Je discute avec des collègues de stratégies efficaces"]};
+    const actions=acts[choice]||[];
+    actions.forEach((a,i)=>{setTimeout(()=>{addMessage(`<div class="action-cle"><strong>Action ${i+1} :</strong> ${a}</div>`);},i*800);});
+    setTimeout(()=>{addMessage('<strong>Comment souhaitez-vous poursuivre ?</strong>');addChoiceButtons([{label:"📖 Autre compétence",value:'autre_competence'},{label:"📄 Fiche synthèse",value:'synthese'},{label:"🏠 Recommencer",value:'restart'}]);conversationState.step='followup';},actions.length*800+500);
+}
+function handleCustomFollowup(choice){
+    if(choice==='actions_immediates'){const comp=(conversationState.detectedCompetences||['P'])[0];const a={'P':["Définir les contenus essentiels","Situer l'activité dans le parcours","Planifier le temps rigoureusement"],'I':["Stimuler la réactivation des connaissances","Varier les méthodes d'interaction","Assurer la participation de tous"],'E':["Faire une rétroaction précise","Définir un plan d'apprentissage","Recueillir le point de vue de l'apprenant"],'R':["Identifier bons coups et points à améliorer","Consulter les évaluations étudiantes","Discuter avec des collègues"]};const actions=a[comp]||[];addMessage('Actions immédiates :');actions.forEach((ac,i)=>{setTimeout(()=>{addMessage(`<div class="action-cle"><strong>Action ${i+1} :</strong> ${ac}</div>`);},i*800);});setTimeout(()=>{addMessage("<button class='restart-btn' onclick='location.reload()'>🔄 Nouvelle consultation</button>");},3000);}
+    else if(choice==='theorie'){addMessage("Le référentiel FMSS s'appuie sur l'apprentissage expérientiel (Kolb), transformateur (Mezirow), et socio-constructiviste (Vygotsky).<br><br><button class='restart-btn' onclick='location.reload()'>🔄 Nouvelle consultation</button>");}
+    else if(choice==='conseiller'){addMessage("👤 Benoît Laforest (le meilleur, selon certaines sources fiables 😉)<br>✉️ benoit.laforest@usherbrooke.ca<br><br><button class='restart-btn' onclick='location.reload()'>🔄 Nouvelle consultation</button>");}
+}
+function handleFollowupChoice(choice){
+    if(choice==='synthese'){generateSynthese();}
+    else if(choice==='approfondir'||choice==='exemples'){addMessage("Pour approfondir :<br>✅ Référentiel complet dans Dossier Professeur<br>✅ Formations pédagogiques FMSS<br><br>👤 Benoît Laforest — ✉️ benoit.laforest@usherbrooke.ca<br><br><button class='restart-btn' onclick='location.reload()'>🔄 Nouvelle consultation</button>");}
+    else{addMessage("<button class='restart-btn' onclick='location.reload()'>🔄 Recommencer</button>");}
+}
+function generateSynthese(){
+    const sit=conversationState.situation?referentiel.misesSituation[conversationState.situation]:null;
+    const ci=referentiel.contextes[conversationState.context];
+    let s=`<div style="background:white;padding:25px;border:2px solid #007749;border-radius:12px;"><div style="background:linear-gradient(135deg,#007749,#006040);color:white;padding:20px;margin:-25px -25px 20px -25px;border-radius:10px 10px 0 0;"><h2 style="margin:0;">📄 Fiche Synthèse Pédagogique</h2><p style="margin:8px 0 0 0;opacity:0.9;font-size:0.9rem;">Référentiel de compétence pédagogique - FMSS</p></div>`;
+    s+=`<div style="background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:20px;"><strong>Contexte :</strong> ${ci.nom}`;
+    if(sit)s+=`<div style="background:#fff8e1;padding:12px;border-left:4px solid #ffc107;border-radius:4px;margin:8px 0;"><strong>${sit.titre}</strong><p style="margin:8px 0 0 0;font-size:0.9rem;">${sit.description}</p></div>`;
+    s+='</div>';
+    if(sit){s+=`<div style="background:#fff3e0;padding:15px;border-radius:8px;margin-bottom:20px;"><h3 style="color:#007749;margin-top:0;">⚡ ACTIONS-CLÉS</h3>`;sit.actionsRecommandees.forEach((a,i)=>{s+=`<div style="background:white;padding:12px;margin:10px 0;border-left:4px solid #ff9800;border-radius:4px;"><strong style="color:#007749;">Action ${i+1} :</strong> ${a}</div>`;});s+=`<div style="background:#e8f5e9;padding:15px;border-radius:8px;margin-top:15px;border-left:4px solid #4caf50;">💡 <strong>Conseil :</strong> ${sit.conseil}</div></div>`;}
+    s+=`<div style="background:#fff9c4;padding:15px;border-radius:8px;"><strong>Benoît Laforest</strong> — CPSS, Université de Sherbrooke<br>✉️ benoit.laforest@usherbrooke.ca</div>`;
+    s+=`<div style="margin-top:20px;text-align:center;"><button class="restart-btn" onclick="window.print()" style="background:#007749;margin-right:10px;">🖨️ Imprimer</button><button class="restart-btn" onclick="location.reload()">🔄 Nouvelle consultation</button></div></div>`;
+    addMessage(s);
+}
+function initConversation(){
+    addMessage("<strong>Bienvenue.</strong> 👋<br><br>Je suis votre <span class='highlight'>Conseiller Pédagogique Virtuel</span>, développé pour vous accompagner dans l'utilisation du Référentiel de compétence pédagogique de la FMSS.<br><br><strong>Dans quel contexte enseignez-vous principalement ?</strong>");
+    setTimeout(()=>{addChoiceButtons([{label:"👨‍🏫 Cours structuré par le programme",value:'classe_structure'},{label:"📚 Cours que je développe moi-même",value:'classe_non_structure'},{label:"🏥 Supervision en stage clinique",value:'stage_clinique'},{label:"🔬 Encadrement études supérieures",value:'etudes_superieures'}]);},500);
+}
+document.getElementById('sendBtn').addEventListener('click',sendCustomMessage);
+document.getElementById('userInput').addEventListener('keypress',function(e){if(e.key==='Enter')sendCustomMessage();});
+function sendCustomMessage(){
+    const input=document.getElementById('userInput'),msg=input.value.trim();
+    if(msg){addMessage(msg,false);input.value='';document.getElementById('inputArea').classList.remove('active');setTimeout(()=>{showTyping();setTimeout(()=>{hideTyping();handleCustomSituation(msg);},1500);},500);}
+}
+function handleCustomSituation(userMessage){
+    const kw={'P':['planifier','préparer','organiser','temps','objectif'],'I':['intervenir','enseigner','animer','groupe','interaction'],'E':['évaluer','rétroaction','feedback','correction'],'R':['réfléchir','améliorer','développement']};
+    let det=[];for(let c in kw){for(let k of kw[c]){if(userMessage.toLowerCase().includes(k)&&!det.includes(c))det.push(c);}}
+    conversationState.detectedCompetences=det;
+    let r='Merci. Votre situation concerne principalement :';
+    if(det.length>0){det.forEach(c=>{const cp=referentiel.competencesPIER[c];r+=`<br><span class="competence-tag">${cp.icone} ${cp.nom}</span>`;});}
+    else{r+='<br><span class="competence-tag">Plusieurs compétences du référentiel</span>';}
+    r+='<br><br><strong>Quelle est votre priorité ?</strong>';
+    addMessage(r);
+    addChoiceButtons([{label:"🎯 Actions immédiates",value:'actions_immediates'},{label:"📖 Cadre théorique",value:'theorie'},{label:"👥 Partager avec un conseiller",value:'conseiller'}]);
+    conversationState.step='custom_followup';
+}
+function openPrivacyModal(){document.getElementById('privacyModalOverlay').classList.add('active');}
+function closePrivacyModal(){document.getElementById('privacyModalOverlay').classList.remove('active');}
+document.getElementById('privacyModalOverlay').addEventListener('click',function(e){if(e.target===this)closePrivacyModal();});
+
+// ==========================================
+// JEU D'ÉVASION
+// ==========================================
+const puzzles=[
+    {title:"Énigme 1: La Lettre Cachée",question:"Je suis la compétence du PIER qui consiste à PRÉPARER les activités d'enseignement AVANT qu'elles aient lieu. Objectifs, méthodes, matériel — tout est de ma responsabilité. Quelle est ma lettre dans l'acronyme?",answer:"P",hints:["Je suis la première lettre de PIER","Je précède toujours l'action en classe","P comme... la compétence qui vient avant tout le reste!"]},
+    {title:"Énigme 2: La Grille Mystérieuse",question:"Dans le référentiel FMSS, la grille d'auto-___ permet à l'enseignant d'identifier ses cibles de développement pédagogique et de générer un rapport personnalisé. Quel mot complète la phrase?",answer:"RÉFLEXION",hints:["Ce mot suit 'auto-' et désigne un regard sur soi-même","C'est un processus d'analyse de sa propre pratique","AUTO-___ : regarder en soi pour progresser. Le mot a 9 lettres."]},
+    {title:"Énigme 3: Le Chiffre Secret",question:"Selon le référentiel FMSS, combien de fonctions principales le superviseur exerce-t-il en contexte de stage clinique? Écris la réponse en lettres.",answer:"TROIS",hints:["C'est entre deux et quatre","Dispenser, accompagner et... une troisième","TROIS fonctions : F1 dispenser, F2 accompagner, F3 coordonner"]},
+    {title:"Énigme 4: L'Agir Compétent",question:"Selon le référentiel FMSS, l'Agir avec compétence requiert d'___, de sélectionner, de combiner et d'utiliser efficacement les ressources nécessaires. Quel est ce premier verbe essentiel?",answer:"IDENTIFIER",hints:["C'est le premier d'une séquence de 4 verbes","Reconnaître, repérer, nommer ce dont on a besoin...","IDENTIFIER — avant de sélectionner, il faut d'abord reconnaître"]},
+    {title:"Énigme 5: La Fonction 2",question:"En stage clinique (Fonction 2 du référentiel FMSS), le superviseur effectue périodiquement un bilan de ___ du stagiaire, en s'appuyant sur son autoanalyse. Quel mot complète?",answer:"PROGRESSION",hints:["C'est ce qu'on mesure quand quelqu'un évolue et avance","Avancement, développement dans le temps...","PROGRESSION — l'évolution du stagiaire par rapport aux attentes du programme"]}
+];
+const funnyMessages=["😅 Pas de souci! La persévérance n'est pas ton fort?","🤷 Le courage, c'est connaître ses limites.","😂 Trop fort pour toi? C'est humain!","✋ On passe à la suivante.","🏃 Fuis! C'est légitime!","😎 Pas grave, tu dois avoir d'autres talents!","🎭 C'était trop subtil pour toi?","🚀 On continue sans toi!"];
+let gCurrent=0,gTime=300,gActive=false,gTimer=null,gHints=0,gSkipping=false;
+
+function initGame(){
+    gCurrent=0;gTime=300;gActive=true;gHints=0;gSkipping=false;
+    document.getElementById('gameContent').style.display='block';
+    document.getElementById('gameSuccess').style.display='none';
+    document.getElementById('gameTimer').textContent='5:00';
+    document.getElementById('gameTimer').classList.remove('critical');
+    document.getElementById('gameTimer').style.color='';
+    renderGProgress();renderGPuzzle();startGTimer();
+}
+function renderGProgress(){
+    document.getElementById('gameProgress').innerHTML=puzzles.map((_,i)=>`<div class="game-dot ${i<gCurrent?'active':''}"></div>`).join('');
+}
+function renderGPuzzle(){
+    const p=puzzles[gCurrent];gHints=0;gSkipping=false;
+    const quitBtn=gCurrent===0?`<button onclick="closeGame()" style="background:linear-gradient(90deg,#95a5a6,#7f8c8d);color:white;padding:12px 16px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">❌ Quitter</button>`:'';
+    document.getElementById('gamePuzzles').innerHTML=`
+        <div class="puzzle-section">
+            <div class="puzzle-lbl">${p.title}</div>
+            <div class="puzzle-q">${p.question}</div>
+            <input type="text" id="gInput" class="puzzle-input" placeholder="Écris ta réponse..." onkeypress="if(event.key==='Enter')gCheck()">
+            <div style="display:flex;gap:10px;margin-bottom:1rem;">
+                <button onclick="gCheck()" style="background:linear-gradient(90deg,#667eea,#764ba2);color:white;padding:12px 24px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;flex:1;">Vérifier</button>
+                <button onclick="gSkip()" style="background:linear-gradient(90deg,#e67e22,#d35400);color:white;padding:12px 24px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;flex:1;">Passer</button>
+                ${quitBtn}
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;">
+                <button id="gh1" onclick="gHint(0)" style="background:white;border:2px solid #ddd;color:#667eea;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;flex:1;">💡 Indice 1</button>
+                <button id="gh2" onclick="gHint(1)" style="background:white;border:2px solid #ddd;color:#667eea;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;flex:1;">💡 Indice 2</button>
+                <button id="gh3" onclick="gHint(2)" style="background:white;border:2px solid #ddd;color:#667eea;padding:8px 12px;border-radius:6px;font-size:13px;cursor:pointer;flex:1;">💡 Indice 3</button>
+            </div>
+            <div id="gHintBox"></div>
+            <div id="gError"></div>
+            <div id="gReveal"></div>
+        </div>`;
+    document.getElementById('gInput').focus();
+}
+function gHint(idx){
+    document.getElementById('gHintBox').innerHTML=`<div class="game-hint-box"><div class="game-hint-lbl">💡 Indice ${idx+1}</div><div>${puzzles[gCurrent].hints[idx]}</div></div>`;
+    gHints=Math.max(gHints,idx+1);
+    for(let i=0;i<3;i++){const b=document.getElementById('gh'+(i+1));if(b&&i<gHints){b.disabled=true;b.style.opacity='0.3';}}
+}
+function gCheck(){
+    if(gSkipping)return;
+    const val=document.getElementById('gInput').value.trim().toUpperCase();
+    if(val===puzzles[gCurrent].answer){gCurrent++;renderGProgress();if(gCurrent===puzzles.length)gWin();else renderGPuzzle();}
+    else{document.getElementById('gError').innerHTML='<div class="game-error">❌ Pas tout à fait... Essaie encore!</div>';}
+}
+function gSkip(){
+    gSkipping=true;
+    const msg=funnyMessages[Math.floor(Math.random()*funnyMessages.length)];
+    document.getElementById('gReveal').innerHTML=`<div class="game-reveal"><div style="font-size:12px;font-weight:600;color:#d68910;text-transform:uppercase;margin-bottom:0.5rem;">Réponse</div><div style="font-size:24px;font-weight:700;color:#e67e22;margin-bottom:0.8rem;">${puzzles[gCurrent].answer}</div><div style="font-size:14px;color:#d68910;font-style:italic;">${msg}</div></div>`;
+    setTimeout(()=>{gCurrent++;renderGProgress();if(gCurrent===puzzles.length)gWin();else renderGPuzzle();},3000);
+}
+function startGTimer(){
+    if(gTimer)clearInterval(gTimer);
+    gTimer=setInterval(()=>{
+        if(!gActive){clearInterval(gTimer);return;}
+        gTime--;
+        const el=document.getElementById('gameTimer');
+        el.textContent=`${Math.floor(gTime/60)}:${(gTime%60).toString().padStart(2,'0')}`;
+        if(gTime<=30)el.classList.add('critical');
+        if(gTime<=0){clearInterval(gTimer);alert('⏰ Temps écoulé! Réessaie!');restartGame();}
+    },1000);
+}
+function gWin(){
+    gActive=false;
+    const min=Math.floor((300-gTime)/60),sec=(300-gTime)%60;
+    document.getElementById('gameFinalTime').textContent=`${min}:${sec.toString().padStart(2,'0')}`;
+    document.getElementById('gameContent').style.display='none';
+    document.getElementById('gameSuccess').style.display='block';
+}
+function restartGame(){
+    if(gTimer)clearInterval(gTimer);
+    initGame();
 }
 
-function updateRecommendedBar() {
-  const $bar = document.getElementById("recommended-bar");
-  if (!$bar) return;
-  const n = recommendedTitles.size;
-  if (n > 0) { $bar.classList.add("active"); document.getElementById("recommended-count").textContent = `${n} ressource${n > 1 ? "s" : ""} recommandée${n > 1 ? "s" : ""}`; }
-  else $bar.classList.remove("active");
+// ==========================================
+// QUIZ
+// ==========================================
+const QUIZ_POOL=[
+    {q:"Quelle est la signification de l'acronyme PIER dans le référentiel de compétence pédagogique de la FMSS ?",options:["Planifier, Intervenir, Évaluer, Réfléchir","Préparer, Intervenir, Évaluer, Rédiger","Planifier, Intégrer, Évaluer, Réformer","Préparer, Intervenir, Examiner, Réfléchir"],correct:0,feedback:"PIER désigne les quatre compétences : Planifier, Intervenir, Évaluer et Réfléchir. Elles interviennent de façon non linéaire et itérative."},
+    {q:"Combien de contextes d'enseignement le référentiel définit-il ?",options:["Deux","Trois","Quatre","Cinq"],correct:2,feedback:"Quatre contextes : classe structurée, classe non structurée, supervision en stage clinique, encadrement aux études supérieures."},
+    {q:"Quel contexte correspond aux activités où la personne enseignante doit identifier elle-même les contenus ?",options:["Enseignement en classe structuré par le programme","Enseignement en classe non structuré par le programme","Supervision et encadrement en stage clinique","Encadrement aux études supérieures"],correct:1,feedback:"Dans le contexte non structuré, la personne enseignante développe elle-même l'ensemble des ressources pédagogiques."},
+    {q:"Que signifie la compétence « Intervenir » ?",options:["Concevoir des évaluations adaptées","Mettre en place les conditions nécessaires à l'enseignement efficace et guider les apprenants","Préparer les actions d'enseignement","Revoir ses actions pour s'améliorer"],correct:1,feedback:"La compétence Intervenir consiste à mettre en place les conditions d'un enseignement efficace et guider les apprenants."},
+    {q:"Combien de fonctions le référentiel identifie-t-il en stage clinique ?",options:["Deux","Trois","Quatre","Cinq"],correct:1,feedback:"Trois fonctions : dispenser l'enseignement clinique quotidien, accompagner le stagiaire, coordonner le stage."}
+];
+let qSession=[],qIdx=0,qScore=0,qAnswered=false,qReview=[];
+function shuffleArray(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function openQuiz(){document.getElementById('quizOverlay').classList.add('active');startQuiz();}
+function closeQuiz(){document.getElementById('quizOverlay').classList.remove('active');}
+function startQuiz(){qSession=shuffleArray(QUIZ_POOL).slice(0,5);qIdx=0;qScore=0;qAnswered=false;qReview=[];document.getElementById('quizQuestionScreen').style.display='block';document.getElementById('quizResultsScreen').classList.remove('show');renderQuestion();}
+function retryQuiz(){document.getElementById('quizResultsScreen').classList.remove('show');document.getElementById('quizQuestionScreen').style.display='block';startQuiz();}
+function renderQuestion(){
+    const q=qSession[qIdx];const num=qIdx+1,tot=qSession.length;
+    document.getElementById('quizProgressBar').style.width=((num-1)/tot*100)+'%';
+    document.getElementById('quizQuestionNum').textContent=`Question ${num} / ${tot}`;
+    document.getElementById('quizQuestionText').textContent=q.q;
+    const letters=['A','B','C','D'],oc=document.getElementById('quizOptions');oc.innerHTML='';
+    const si=shuffleArray([0,1,2,3]);q._sc=si.indexOf(q.correct);q._so=si.map(i=>q.options[i]);
+    q._so.forEach((opt,idx)=>{const btn=document.createElement('button');btn.className='quiz-option';btn.innerHTML=`<span class="quiz-option-letter">${letters[idx]}</span><span>${opt}</span>`;btn.onclick=()=>handleAnswer(idx);oc.appendChild(btn);});
+    document.getElementById('quizFeedback').className='quiz-feedback';document.getElementById('quizFeedback').textContent='';
+    document.getElementById('quizNextBtn').className='quiz-next-btn';document.getElementById('quizNextBtn').textContent=qIdx<qSession.length-1?'Suivant →':'Voir les résultats';
+    qAnswered=false;
+}
+function handleAnswer(sel){
+    if(qAnswered)return;qAnswered=true;
+    const q=qSession[qIdx],ci=q._sc,ok=sel===ci;
+    document.querySelectorAll('.quiz-option').forEach((b,i)=>{b.disabled=true;if(i===ci){b.classList.add(ok&&i===sel?'correct':'reveal-correct');}else if(i===sel){b.classList.add('wrong');}});
+    if(ok){document.querySelectorAll('.quiz-option')[sel].classList.remove('reveal-correct');document.querySelectorAll('.quiz-option')[sel].classList.add('correct');qScore++;}
+    const fb=document.getElementById('quizFeedback');fb.className='quiz-feedback show '+(ok?'correct-fb':'wrong-fb');fb.innerHTML=(ok?'✅ ':'❌ ')+q.feedback;
+    qReview.push({question:q.q,yourAnswer:q._so[sel],correctAnswer:q._so[ci],isCorrect:ok});
+    document.getElementById('quizNextBtn').classList.add('show');
+    document.getElementById('quizProgressBar').style.width=((qIdx+1)/qSession.length*100)+'%';
+}
+function nextQuestion(){qIdx++;if(qIdx>=qSession.length)showResults();else renderQuestion();}
+function showResults(){
+    document.getElementById('quizQuestionScreen').style.display='none';
+    document.getElementById('quizResultsScreen').classList.add('show');
+    document.getElementById('quizScoreNum').textContent=qScore;
+    const titles=['À revoir','À revoir','À consolider','Bien joué','Très bien !','Excellent !'];
+    const badges=['📖 Continuez','📖 Continuez','🥉 En développement','🥈 En progression','🥇 Très solide','🏆 Score parfait'];
+    const msgs=["Parcourez le référentiel FMSS et retentez le quiz.","Parcourez le référentiel FMSS et retentez le quiz.","Parcourez les grilles d'autoréflexion pour ancrer les concepts.","Bonne base ! Quelques concepts méritent un approfondissement.","Très bonne connaissance du référentiel.","Vous maîtrisez le référentiel FMSS. Bravo !"];
+    document.getElementById('quizResultTitle').textContent=titles[qScore];
+    document.getElementById('quizGoldBadge').textContent=badges[qScore];
+    document.getElementById('quizResultMsg').textContent=msgs[qScore];
+    const rc=document.getElementById('quizAnswersReview');rc.innerHTML='<h4>Révision de vos réponses</h4>';
+    qReview.forEach((item,i)=>{const d=document.createElement('div');d.className='review-item '+(item.isCorrect?'ok':'ko');d.innerHTML=`<div class="review-q">Q${i+1}. ${item.question}</div>`+(!item.isCorrect?`<div class="review-your">Votre réponse : ${item.yourAnswer}</div><div class="review-correct">Bonne réponse : ${item.correctAnswer}</div>`:`<div class="review-correct">✓ ${item.yourAnswer}</div>`);rc.appendChild(d);});
+    document.querySelector('.quiz-panel').scrollTop=0;
 }
 
-// === Synthesis Modal ===
-function openModal() {
-  if (recommendedTitles.size === 0) { alert("Aucune ressource n'a été recommandée. Continuez la conversation pour obtenir des suggestions."); return; }
-  renderSynthesisPreview(); $modalOverlay.classList.add("open"); $modalOverlay.setAttribute("aria-hidden", "false");
-}
-function closeModal() { $modalOverlay.classList.remove("open"); $modalOverlay.setAttribute("aria-hidden", "true"); }
-function getRecommendedResources() { const all = getAllResources(); return Array.from(recommendedTitles).map(t => all.find(r => r.titre === t)).filter(Boolean); }
-function getInitialContext() { const first = conversation.find(m => m.role === "user"); return first ? first.content : "Recommandations issues d'une consultation de l'assistant pédagogique."; }
-
-function renderSynthesisPreview() {
-  const recs = getRecommendedResources();
-  const date = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
-  const byActivity = {};
-  recs.forEach(r => { const act = r.activite || "Autre"; if (!byActivity[act]) byActivity[act] = []; byActivity[act].push(r); });
-  let html = `
-    <div class="synthesis-preview">
-      <h2>Fiche-synthèse de ressources pédagogiques</h2>
-      <div class="subtitle">Microprogramme Gestion de la douleur · ${date}</div>
-      <h3>Contexte du besoin</h3>
-      <textarea class="context-edit" id="synth-context" placeholder="Résumez le besoin pédagogique...">${escapeHTML(getInitialContext())}</textarea>
-      <h3>Ressources recommandées (${recs.length})</h3>`;
-  for (const [act, items] of Object.entries(byActivity)) {
-    html += `<h4>${escapeHTML(act)}</h4>`;
-    items.forEach(r => {
-      const cat = getCategoryById(r.categorie);
-      html += `<div class="synthesis-resource" data-title="${escapeHTML(r.titre)}">
-        <button class="remove-btn" aria-label="Retirer">×</button>
-        <div class="res-title">${escapeHTML(r.titre)}</div>
-        <div class="res-meta">${escapeHTML(cat.label)} · ${escapeHTML(getTypeLabel(r.type))} · ${escapeHTML(r.duree || "—")}</div>
-        <div class="res-desc">${escapeHTML(r.description)}</div>
-        <div class="res-url">${escapeHTML(r.url)}</div></div>`;
-    });
-  }
-  html += `</div>`;
-  $modalBody.innerHTML = html;
-  $modalBody.querySelectorAll(".remove-btn").forEach(btn => {
-    btn.addEventListener("click", e => {
-      const card = e.target.closest(".synthesis-resource");
-      const title = card.dataset.title;
-      recommendedTitles.delete(title);
-      if (recommendedTitles.size === 0) closeModal(); else renderSynthesisPreview();
-      updateRecommendedBar();
-    });
-  });
-}
-
-function exportSynthesis(format) {
-  const recs = getRecommendedResources();
-  if (recs.length === 0) { alert("Aucune ressource à exporter."); return; }
-  const context = document.getElementById("synth-context")?.value || getInitialContext();
-  const date = new Date().toLocaleDateString("fr-CA", { year: "numeric", month: "long", day: "numeric" });
-  const filenameDate = new Date().toISOString().slice(0, 10);
-  if (format === "docx") exportDocx(context, recs, date, filenameDate);
-  else exportPdf(context, recs, date);
-}
-
-function buildSynthesisHtml(context, recs, date) {
-  const byActivity = {};
-  recs.forEach(r => { const act = r.activite || "Autre"; if (!byActivity[act]) byActivity[act] = []; byActivity[act].push(r); });
-  const css = `
-    @page { size: A4; margin: 1.5cm 2cm; }
-    body { font-family: Calibri, Arial, sans-serif; color: #1a1a1a; line-height: 1.55; max-width: 720px; margin: 0 auto; padding: 12px; }
-    .header { background: #00553A; color: white; padding: 24px; margin-bottom: 24px; border-radius: 4px; }
-    .header h1 { font-size: 20pt; margin: 0 0 6px 0; font-weight: 600; }
-    .header .meta { font-size: 11pt; opacity: 0.92; }
-    h2 { color: #00553A; font-size: 13pt; margin: 22px 0 10px; padding-bottom: 4px; border-bottom: 2px solid #F1B434; }
-    .context { background: #FFF1CC; padding: 12px 16px; border-left: 4px solid #F1B434; border-radius: 4px; font-size: 11pt; margin-bottom: 12px; }
-    .resource { background: #fafaf9; padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #00553A; page-break-inside: avoid; }
-    .r-title { font-weight: 600; font-size: 11pt; color: #1a1a1a; }
-    .r-meta { font-size: 9pt; color: #767676; margin: 4px 0 6px; }
-    .r-desc { font-size: 10pt; color: #4a4a4a; }
-    .r-url { font-size: 9pt; color: #00553A; word-break: break-all; margin-top: 4px; }
-    .footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid #e5e5e3; font-size: 9pt; color: #767676; }`;
-  let body = `<div class="header"><h1>Fiche-synthèse de ressources pédagogiques</h1><div class="meta">Microprogramme Gestion de la douleur · FMSS — Université de Sherbrooke<br>${date}</div></div><h2>Contexte du besoin</h2><div class="context">${escapeHTML(context).replace(/\n/g, "<br>")}</div>`;
-  for (const [act, items] of Object.entries(byActivity)) {
-    body += `<h2>${escapeHTML(act)}</h2>`;
-    items.forEach(r => {
-      const cat = getCategoryById(r.categorie);
-      body += `<div class="resource"><div class="r-title">${escapeHTML(r.titre)}</div><div class="r-meta">${escapeHTML(cat.label)} · ${escapeHTML(getTypeLabel(r.type))} · ${escapeHTML(r.duree || "—")}</div><div class="r-desc">${escapeHTML(r.description)}</div><div class="r-url">${escapeHTML(r.url)}</div></div>`;
-    });
-  }
-  body += `<div class="footer"><strong>Trousse pédagogique Moodle — Microprogramme GDL</strong><br>Fiche générée le ${date} via l'assistant pédagogique de la trousse.<br>Toutes les ressources listées sont publiquement accessibles.</div>`;
-  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Fiche-synthèse — ${date}</title><style>${css}</style></head><body>${body}</body></html>`;
-}
-
-function exportPdf(context, recs, date) {
-  const html = buildSynthesisHtml(context, recs, date);
-  const w = window.open("", "_blank");
-  if (!w) { alert("Impossible d'ouvrir une nouvelle fenêtre. Autorisez les pop-ups pour ce site."); return; }
-  w.document.open(); w.document.write(html); w.document.close();
-  setTimeout(() => { w.focus(); w.print(); }, 500);
-}
-
-function exportDocx(context, recs, date, filenameDate) {
-  const html = buildSynthesisHtml(context, recs, date);
-  const wordHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>${html.substring(html.indexOf("<head>"))}`;
-  const blob = new Blob(["﻿", wordHtml], { type: "application/msword" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `Fiche-synthese_GDL_${filenameDate}.doc`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
+// Lancer l'application
+window.addEventListener('load', checkConsent);
 </script>
-
 </body>
 </html>
